@@ -4,13 +4,13 @@ public class ManageOrder {
     //attributes
     private Customer customer;
     private int item_count;
-    private CourierMode deliveryMode;
+    private String deliveryMode;
     private int ticket_num;
     private List<String[]> order_details;
     private OrderStatus status;
 
     //Constructor
-    public ManageOrder(Customer customer, int item_count, CourierMode delMode, int ticket_num, OrderStatus status, List<String[]> details){
+    public ManageOrder(Customer customer, int item_count, String delMode, int ticket_num, OrderStatus status, List<String[]> details){
         this.customer = customer;
         this.item_count = item_count;
         this.status = status;
@@ -40,7 +40,7 @@ public class ManageOrder {
     }
 
     public String getMode(){
-        return deliveryMode.name();
+        return this.deliveryMode;
     }
 
     public String getStatus(){
@@ -48,14 +48,21 @@ public class ManageOrder {
     }
 
     public String sgetOrderDetails(){
-        String[] leng = order_details.get(0);
+        String resultString = "[";
+        String[] orderList = order_details.get(0);
+        for(String order: orderList){
+            System.out.println("PRINT DEATILS "+order);
+            resultString += "[" + order.replaceAll("\\s+","") + "]";
+        }
+        /*
         String[] i = leng[0].split(", ");
         String type = i[0];
         String color = i[1];
         String size = i[2];
 
-        String str = type + ", " + color + ", " + size;
-        return str;
+        String str = type + "," + color + "," + size;*/
+        resultString+="]";
+        return resultString;
     }
 
     public void getPrice(){
@@ -71,9 +78,9 @@ public class ManageOrder {
         return 0.0;
     }
 
-    //Output: 1 - 620148438, Jane Doe, 2, [['bikini_bottom', 'red', 'M']], Pending
+    //Output: 1 - 620148438, Jane Doe, 2, [['bikini_bottom','red','M']], Pending
     public String toString(){
-        return "" + getTicketNum() + ", " + getCustomerID() + ", " + getOwner() + ", " + getItemCount() + ", " + sgetOrderDetails() + ", " + getStatus();
+        return getTicketNum() + ", " + getCustomerID() + ", " + getOwner() + ", " + getItemCount() + ", " + sgetOrderDetails() + ", " + this.deliveryMode + ", "+ getStatus();
     }
 
 }

@@ -1,4 +1,5 @@
 public enum CourierMode {
     Pickup,
-    Delivery
+    Delivery,
+    Home_Delivery
 }

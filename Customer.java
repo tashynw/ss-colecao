@@ -26,7 +26,7 @@ public class Customer {
 	}
 
     public String getFullName(){
-        return "" + getFName() + " " + getLName();
+        return getFName() + " " + getLName();
     }
 
 	public String getID(){

@@ -1,8 +1,8 @@
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
-
 import java.awt.event.*;
-
+import org.json.JSONArray;
+import org.json.JSONObject;
 import java.awt.*;
 import java.util.List;
 import java.awt.Color;
@@ -287,7 +287,7 @@ public class ManageOrderUserInterface extends JFrame implements OrderQueue{
 
     //Method to show orders in a list in GUI table display.
     private void showTable(ArrayList<ManageOrder> olst){
-        if (manageOrder_queue.size()>0)
+        if (manageOrder_queue.size()<=0) return;
         for(int j = 0; manageOrder_queue.size()>j; j++)
             addToTable(manageOrder_queue.get(j));
     }
@@ -319,21 +319,23 @@ public class ManageOrderUserInterface extends JFrame implements OrderQueue{
             {
                 String data = sscan.nextLine();
                 String[] nextLine = data.split(", ");
-                //Output: 1, 620148438, Jane Doe, 2, [['bikini_bottom', 'red', 'M']], Home_Delivery, Pending
+                //Output: 1, 620148438, Jane Doe, 2, [['bikini_bottom','red','M']], Home_Delivery, Pending
 
                 int leng = nextLine.length;
 
                 int ticket = Integer.parseInt(nextLine[0]);
                 String custID = nextLine[1];
-                String cust_fName = nextLine[2];
-                String cust_lName = nextLine[3];
-                OrderStatus status = OrderStatus.valueOf(nextLine[leng-1]);
-                CourierMode mode = CourierMode.valueOf("Delivery");
-                System.out.println(custID);
 
-                int item_count = Integer.parseInt(nextLine[4]);
+                String[] name = nextLine[2].split(" ");
+                String cust_fName = name[0];
+                String cust_lName = name[1];
+
+                String mode = nextLine[5];
+                OrderStatus status = OrderStatus.valueOf(nextLine[6]);
+
+                int item_count = Integer.parseInt(nextLine[3]);
                 int i = 5;
-
+                /*
                 while(i<(item_count*3)+4){ //16 -> 3(5,6,7)+3(8,9,10)+3(11,12,13)+3(14,15,16)
                     String stype = nextLine[i].replaceAll("\\[", "").replaceAll("\\]","");
                     String scolor = nextLine[i+1];
@@ -342,6 +344,17 @@ public class ManageOrderUserInterface extends JFrame implements OrderQueue{
                     order_details = new String[]{stype, scolor, ssize};
                     compressed_details.add(order_details);
                     i=i+3;
+                }*/
+                JSONArray jsonArray = new JSONArray(nextLine[4]);
+                for (Object innerArrayObj : jsonArray) {
+                    JSONArray innerJsonArray = (JSONArray) innerArrayObj;
+
+                    List<String> innerList = new ArrayList<>();
+                    for (Object innerElementObj : innerJsonArray) {
+                        String innerElement = innerElementObj.toString();
+                        innerList.add(innerElement);
+                    }
+                    compressed_details.add(innerList.toArray(new String[0]));
                 }
                 //Search for customer by Id: if found return the customer else create a customer
                 //Order(Customer customer, int item_count, CourierMode delMode, int ticket_num, OrderStatus status, String[] details)
@@ -384,7 +397,7 @@ public class ManageOrderUserInterface extends JFrame implements OrderQueue{
     
     @Override
     public void enqueue(ManageOrder o){
-        
+
     }
 
 
@@ -536,6 +549,24 @@ public class ManageOrderUserInterface extends JFrame implements OrderQueue{
                 ascreen.setVisible(true);   
             }
 
+            //reset btn
+            if(eve.getSource()==reset_btn){
+                c_fname.setText("");
+                c_lname.setText("");
+                cont.setText("");
+                add.setText("");
+                e_add.setText("");
+                countery2.setText("");
+            }
+
+            if(eve.getSource()==cancel_btn){
+                background.setVisible(false);
+
+                MainMenu mscreen = new MainMenu(frame);
+                frame.add(mscreen);
+                mscreen.setVisible(true);
+            }
+
             //confirm
             if(eve.getSource()==confirm_btn){
 
@@ -551,7 +582,7 @@ public class ManageOrderUserInterface extends JFrame implements OrderQueue{
                     String email = e_add.getText();
                     int counter2 = Integer.parseInt(countery2.getText());
 
-                    CourierMode mode = CourierMode.valueOf(courier_menu.getSelectedItem().toString());
+                    String mode = courier_menu.getSelectedItem().toString();
 
                     String id = nextID();
 
