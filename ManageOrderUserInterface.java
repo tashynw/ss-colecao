@@ -1,8 +1,7 @@
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import java.awt.event.*;
-import org.json.JSONArray;
-import org.json.JSONObject;
+
 import java.awt.*;
 import java.util.List;
 import java.awt.Color;
@@ -67,10 +66,10 @@ public class ManageOrderUserInterface extends JFrame implements OrderQueue{
     private JLabel logo;
 
     private String[][] det;
-    private ManageOrder manageOrder;
-    private ManageStock stock_manager;
+    private Order manageOrder;
+    private ManageStockUserInterface stock_manager;
     private ManageCustomer customer_manager;
-    private ArrayList<ManageOrder> manageOrder_queue = new ArrayList<ManageOrder>();
+    private List<Order> manageOrder_queue = new ArrayList<Order>();
     
     private int ticket_number;
 
@@ -88,13 +87,13 @@ public class ManageOrderUserInterface extends JFrame implements OrderQueue{
         search_label = new JLabel("Search");*/
 
         //Table Setup
-        manageOrder_queue = load_orders("database/orders.txt");
-        String[] columnNames = {"Ticket #", "Customer ID", "Full Name", "Item Amount", "Status"};
+        manageOrder_queue = ManageOrder.getAllOrders();
+        String[] columnNames = {"Customer ID", "Full Name", "Item Amount", "Status"};
 
         model = new DefaultTableModel(columnNames, 0);
         otable = new JTable(model);
         sort = new TableRowSorter<>(model);
-        showTable(manageOrder_queue);
+        showTable((ArrayList<Order>) manageOrder_queue);
         otable.setRowSorter(sort);
         otable.setBounds(20, 30, 450, 450);
         pane = new JScrollPane(otable);
@@ -286,89 +285,24 @@ public class ManageOrderUserInterface extends JFrame implements OrderQueue{
     }
 
     //Method to show orders in a list in GUI table display.
-    private void showTable(ArrayList<ManageOrder> olst){
+    private void showTable(ArrayList<Order> olst){
         if (manageOrder_queue.size()<=0) return;
         for(int j = 0; manageOrder_queue.size()>j; j++)
             addToTable(manageOrder_queue.get(j));
     }
 
     //Function to add a row to the table
-    private void addToTable(ManageOrder o){
-        int ticket_num = o.getTicketNum();
+    private void addToTable(Order o){
         String iD = o.getCustomerID();
         String full = o.getCustomerName();
         int amt = o.getItemCount();
         String stat = o.getStatus();
         
         //{"Ticket #", "Customer ID", "Item Amount", "Status"};
-        String[] item= {""+ticket_num, ""+iD, full, ""+amt, stat};
+        String[] item= {""+ iD, full, ""+amt, stat};
         model.addRow(item);   
     }
-    
-    //Function to create an array list of orders from a file
-    private ArrayList<ManageOrder> load_orders(String ofile){
 
-        Scanner sscan = null;
-        ArrayList<ManageOrder> manageOrderList = new ArrayList<ManageOrder>();
-        List<String[]> compressed_details = new ArrayList<String[]>();;
-        String[] order_details;
-
-        try{
-            sscan  = new Scanner(new File(ofile));
-            while(sscan.hasNext())
-            {
-                String data = sscan.nextLine();
-                String[] nextLine = data.split(", ");
-                //Output: 1, 620148438, Jane Doe, 2, [['bikini_bottom','red','M']], Home_Delivery, Pending
-
-                int leng = nextLine.length;
-
-                int ticket = Integer.parseInt(nextLine[0]);
-                String custID = nextLine[1];
-
-                String[] name = nextLine[2].split(" ");
-                String cust_fName = name[0];
-                String cust_lName = name[1];
-
-                String mode = nextLine[5];
-                OrderStatus status = OrderStatus.valueOf(nextLine[6]);
-
-                int item_count = Integer.parseInt(nextLine[3]);
-                int i = 5;
-                /*
-                while(i<(item_count*3)+4){ //16 -> 3(5,6,7)+3(8,9,10)+3(11,12,13)+3(14,15,16)
-                    String stype = nextLine[i].replaceAll("\\[", "").replaceAll("\\]","");
-                    String scolor = nextLine[i+1];
-                    String ssize = nextLine[i+2].replaceAll("\\[", "").replaceAll("\\]","");
-
-                    order_details = new String[]{stype, scolor, ssize};
-                    compressed_details.add(order_details);
-                    i=i+3;
-                }*/
-                JSONArray jsonArray = new JSONArray(nextLine[4]);
-                for (Object innerArrayObj : jsonArray) {
-                    JSONArray innerJsonArray = (JSONArray) innerArrayObj;
-
-                    List<String> innerList = new ArrayList<>();
-                    for (Object innerElementObj : innerJsonArray) {
-                        String innerElement = innerElementObj.toString();
-                        innerList.add(innerElement);
-                    }
-                    compressed_details.add(innerList.toArray(new String[0]));
-                }
-                //Search for customer by Id: if found return the customer else create a customer
-                //Order(Customer customer, int item_count, CourierMode delMode, int ticket_num, OrderStatus status, String[] details)
-
-                Customer c = customer_manager.findCustomer(custID);
-                ManageOrder o = new ManageOrder(c, item_count, mode, ticket, status, compressed_details);
-                manageOrderList.add(o);
-            }
-            sscan.close();
-        }
-        catch(IOException e)
-        {}
-        return manageOrderList;
-    }
 
     //Method to create a ticket with #
     private int make_ticket(){
@@ -396,7 +330,7 @@ public class ManageOrderUserInterface extends JFrame implements OrderQueue{
     //Function to add one order to the Order queue
     
     @Override
-    public void enqueue(ManageOrder o){
+    public void enqueue(Order o){
 
     }
 
@@ -427,21 +361,21 @@ public class ManageOrderUserInterface extends JFrame implements OrderQueue{
     // Removes and returns the element at the front of the queue
     //removed element will be added to a new list IF status == completed
     @Override
-    public ManageOrder dequeue( ){
+    public Order dequeue( ){
         return manageOrder;
     }
 
     //Returns without removing the last element of the queue
     @Override
-    public ManageOrder last( ){
-        ManageOrder last_Manage_order = manageOrder_queue.get(-1);
+    public Order last( ){
+        Order last_Manage_order = manageOrder_queue.get(-1);
         return last_Manage_order;
     }
 
     // Returns without removing the element at the front of the queue
     @Override
-    public ManageOrder first( ){
-        ManageOrder first_Manage_order = manageOrder_queue.get(0);
+    public Order first( ){
+        Order first_Manage_order = manageOrder_queue.get(0);
         return first_Manage_order;
     }
 
@@ -569,12 +503,13 @@ public class ManageOrderUserInterface extends JFrame implements OrderQueue{
 
             //confirm
             if(eve.getSource()==confirm_btn){
+                ManageCustomer.getAllCustomers();
 
                 if(c_fname.getText().isBlank() || c_lname.getText().isBlank() || cont.getText().isBlank() || add.getText().isBlank() || e_add.getText().isBlank() || countery2.getText().isBlank()){
                     errormsg.setText("Please fill out all the fields");
                 }
                 else{
-                    ManageOrder ord;
+                    Order ord;
                     String fname = c_fname.getText();
                     String lname = c_lname.getText();
                     String contact = cont.getText();
@@ -588,7 +523,7 @@ public class ManageOrderUserInterface extends JFrame implements OrderQueue{
 
                     //String fName, String lName, String id, String contact, String address, String email
                     Customer cust = new Customer(fname, lname, id, contact, address, email);
-                    List<String[]> details = new ArrayList<String[]>();
+
 
                     //Order Derail
                     StockType type = StockType.valueOf(item_type_menu.getSelectedItem().toString());
@@ -596,15 +531,17 @@ public class ManageOrderUserInterface extends JFrame implements OrderQueue{
                     Size size = Size.valueOf(item_size_menu.getSelectedItem().toString());
                     
                     String[] temp = {type.name() + ", " + color.name() + ", " + size.name()};
+                    /*List<String[]> details = new ArrayList<String[]>();
                     details.add(temp);
-                    for(int i=0;i<details.size();i++) System.out.println("MODEL TEST "+Arrays.toString(details.get(i)));
+                    for(int i=0;i<details.size();i++) System.out.println("MODEL TEST "+Arrays.toString(details.get(i)));*/
+                    Stock details = null;
                     if(customer_manager.findCustomer(cust.getID())!=null){
                         //Continue as normal
-                        ord = new ManageOrder(customer_manager.findCustomer(cust.getID()), counter2, mode, ticket_number, OrderStatus.valueOf("Pending"), details);
+                        ord = new Order(customer_manager.findCustomer(cust.getID()), counter2, mode, "Pending", details);
                     }
                     else{
                         //Customer customer, int item_count, CourierMode delMode, int ticket_num, OrderStatus status, List<String[]> details
-                        ord = new ManageOrder(cust, counter2, mode, ticket_number, OrderStatus.valueOf("Pending"), details);
+                        ord = new Order(cust, counter2, mode,"Pending", details);
                     }
                     
                     try{

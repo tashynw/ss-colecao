@@ -2,3 +2,4 @@
 0, 0, Tashyn Wallace, 4, [[Bikini_Bottom,Black,S]], Pickup, Pending
 0, 0, Tashyn Wallace, 8, [[Bikini_Top,White,M]], Delivery, Pending
 0, 0, Tashyn Wallace, 3, [[Bikini_Top,White,L]], Delivery, Pending
+0, 0, Tashyn Wallace, 10, [[Bikini_Bottom,Pattern,M]], Pickup, Pending

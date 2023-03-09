@@ -34,7 +34,7 @@ public class Coupon{
     //This function takes a list of orders and a specific order
     //It will take the customer ID from the order and scan the
     //order list to count the amount of times an ID shows up more than 1 time
-    public void check_eligibility(File olist, ManageOrder o){
+    public void check_eligibility(File olist, Order o){
         //take order and retrieve the ID field
         
     }

@@ -3,13 +3,13 @@
 //FIFO - Queue first in first out
 public interface OrderQueue{
     // Adds one element to the rear of the queue
-    public void enqueue(ManageOrder o);
+    public void enqueue(Order o);
 
     // Removes and returns the element at the front of the queue
-    public ManageOrder dequeue( );
+    public Order dequeue( );
 
     // Returns without removing the element at the front of the queue
-    public ManageOrder first( );
+    public Order first( );
 
     // Returns true if the queue contains no elements
     public boolean isEmpty( );
@@ -21,5 +21,5 @@ public interface OrderQueue{
     public String toString( );
 
     //Returns without removing the last element of the queue
-    public ManageOrder last();
+    public Order last();
 }
