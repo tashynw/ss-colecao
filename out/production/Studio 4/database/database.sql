@@ -4,6 +4,7 @@ USE ss_colecao;
 
 /* Creating users/credentials table */
 CREATE TABLE Users(
+    user_id int PRIMARY KEY AUTO_INCREMENT,
     username varchar(255),
     password varchar(255)
 );
@@ -14,7 +15,7 @@ VALUES (
 
 /*Creating Customers table*/
 CREATE TABLE Customers(
-    customer_id int PRIMARY KEY,
+    customer_id int PRIMARY KEY AUTO_INCREMENT,
     firstName varchar(255),
     lastName varchar(255),
     address varchar(255),
@@ -22,35 +23,35 @@ CREATE TABLE Customers(
     email varchar(255)
 );
 
-INSERT INTO Customers (customer_id, firstName, lastName, address, phone_number, email)
+INSERT INTO Customers (firstName, lastName, address, phone_number, email)
 VALUES (
-    1, 'John', 'Doe', '123 Main St', '555-1234', 'johndoe@example.com'
+    'John', 'Doe', '123 Main St', '555-1234', 'johndoe@example.com'
 ),
 (
-    2, 'Jane', 'Doe', '456 Oak Ave', '555-5678', 'janedoe@example.com'
+    'Jane', 'Doe', '456 Oak Ave', '555-5678', 'janedoe@example.com'
 );
 
 /* Creating Stocks table */
 CREATE TABLE Stocks(
-    stock_id int PRIMARY KEY,
+    stock_id int PRIMARY KEY AUTO_INCREMENT,
     item_name varchar(255),
     item_color varchar(255),
     item_size varchar(255),
     price float
 );
 
-INSERT INTO Stocks (stock_id, item_name, item_color, item_size, price)
+INSERT INTO Stocks (item_name, item_color, item_size, price)
 VALUES (
-    1, 'Widget A', 'Red', 'Small', 9.99
+    'Bikini_Bottom', 'Black', 'S', 9.99
 ),
 (
-    2, 'Widget B', 'Blue', 'Large', 19.99
+    'Bikini_Top', 'Pattern', 'L', 19.99
 );
 
 
 /*Creating Orders table*/
 CREATE TABLE Orders(
-    order_id int PRIMARY KEY,
+    order_id int PRIMARY KEY AUTO_INCREMENT,
     customer_id int,
     stock_id int,
     item_count int,
@@ -61,10 +62,10 @@ CREATE TABLE Orders(
 );
 
 -- Add an order for customer with ID 1, purchasing 2 units of stock item with ID 1
-INSERT INTO Orders (order_id, customer_id, stock_id, item_count, deliver_mode, status)
+INSERT INTO Orders (customer_id, stock_id, item_count, deliver_mode, status)
 VALUES (
-    1, 1, 1, 2, 'Standard', 'Pending'
+    1, 1, 2, 'Standard', 'Pending'
 ),(
-    2, 2, 2, 1, 'Express', 'Pending'
+    2, 2, 1, 'Express', 'Pending'
 );
 

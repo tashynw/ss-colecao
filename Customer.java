@@ -8,10 +8,9 @@ public class Customer {
 
     //Constructor
     //(fname, lname, id, contact, add, email)
-    public Customer(String fName, String lName, String id, String contact, String address, String email){
+    public Customer(String fName, String lName, String contact, String address, String email){
         this.fName = fName;
 		this.lName = lName;
-		this.id = id;
         this.contact = contact;
         this.address = address;
         this.email = email;

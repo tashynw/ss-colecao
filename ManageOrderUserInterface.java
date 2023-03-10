@@ -14,7 +14,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-public class ManageOrderUserInterface extends JFrame implements OrderQueue{
+public class ManageOrderUserInterface extends JFrame{
     //Instance Variables/Attributes
     private JTextField searchbar;
     private JLabel search_label;
@@ -70,14 +70,11 @@ public class ManageOrderUserInterface extends JFrame implements OrderQueue{
     private ManageStockUserInterface stock_manager;
     private ManageCustomer customer_manager;
     private List<Order> manageOrder_queue = new ArrayList<Order>();
-    
-    private int ticket_number;
 
     public ManageOrderUserInterface(){
         this.frame = this;
         //Font and Defaults
         customer_manager = new ManageCustomer();
-        this.ticket_number = make_ticket();
 
         Font f = new Font("Montserrat", Font.BOLD, 20);
         frame.setTitle("SS Colecao - Manage Orders");
@@ -88,9 +85,9 @@ public class ManageOrderUserInterface extends JFrame implements OrderQueue{
 
         //Table Setup
         manageOrder_queue = ManageOrder.getAllOrders();
-        String[] columnNames = {"Customer ID", "Full Name", "Item Amount", "Status"};
+        String[] columnNames = {"Full Name", "Item Amount", "Status", "ItemName", "Total Price"};
 
-        model = new DefaultTableModel(columnNames, 0);
+        this.model = new DefaultTableModel(columnNames, 0);
         otable = new JTable(model);
         sort = new TableRowSorter<>(model);
         showTable((ArrayList<Order>) manageOrder_queue);
@@ -286,178 +283,23 @@ public class ManageOrderUserInterface extends JFrame implements OrderQueue{
 
     //Method to show orders in a list in GUI table display.
     private void showTable(ArrayList<Order> olst){
-        if (manageOrder_queue.size()<=0) return;
-        for(int j = 0; manageOrder_queue.size()>j; j++)
-            addToTable(manageOrder_queue.get(j));
+        if (olst.size()<=0) return;
+        for(int j = 0; olst.size()>j; j++)
+            addToTable(olst.get(j));
     }
 
     //Function to add a row to the table
     private void addToTable(Order o){
-        String iD = o.getCustomerID();
         String full = o.getCustomerName();
         int amt = o.getItemCount();
         String stat = o.getStatus();
-        
-        //{"Ticket #", "Customer ID", "Item Amount", "Status"};
-        String[] item= {""+ iD, full, ""+amt, stat};
-        model.addRow(item);   
-    }
+        String itemName = o.getItem().getStockType().name();
+        String totalCost = String.valueOf(Float.parseFloat(ManageStock.getPriceFromItemName(itemName)) * amt);
 
-
-    //Method to create a ticket with #
-    private int make_ticket(){
-        /*try
-		{
-			//File file=new File("database/orders.txt");
-			//Scanner sscan=new Scanner(file);
-			//while(sscan.hasNext()){
-				//String [] nextLine = sscan.nextLine().split(" ");
-                //get last ticket in queue and increment the ticket num
-				//if(Integer.parseInt(nextLine[0])==last().getTicketNum())
-				//{
-				ticket_number++;
-				//}
-			//}
-            //sscan.close();
-		}
-		catch(Exception e)
-		{ }*/ 
-		return ticket_number++;
-    }
-    
-    //Order Queue
-    // Adds one element to the rear of the queue
-    //Function to add one order to the Order queue
-    
-    @Override
-    public void enqueue(Order o){
+        String[] item= {full, String.valueOf(amt), stat, itemName, totalCost};
+        model.addRow(item);
 
     }
-
-
-    private String nextID(){
-        int ID = 0;
-        try{
-		    File file=new File("database/customers.txt");
-			Scanner sscan=new Scanner(file);
-			while(sscan.hasNext()){
-				String [] nextLine = sscan.nextLine().split(" ");
-                //get last ticket in queue and increment the ticket num
-				if(nextLine[0].equals(last().getCustomerID())){
-                    ID = Integer.parseInt(last().getCustomerID()) + 1;
-                }
-            }
-            sscan.close();
-		}
-		catch(Exception e)
-		{ }
-        return ""+ID;
-    }
-    //Function to Create an Order
-    //1, 620148438, Jane Doe, 2, [['bikini_bottom', 'red', 'M']], pickup, Pending
-
-
-    //Function to delete an Order - pop the queue and rewrite the file
-    // Removes and returns the element at the front of the queue
-    //removed element will be added to a new list IF status == completed
-    @Override
-    public Order dequeue( ){
-        return manageOrder;
-    }
-
-    //Returns without removing the last element of the queue
-    @Override
-    public Order last( ){
-        Order last_Manage_order = manageOrder_queue.get(-1);
-        return last_Manage_order;
-    }
-
-    // Returns without removing the element at the front of the queue
-    @Override
-    public Order first( ){
-        Order first_Manage_order = manageOrder_queue.get(0);
-        return first_Manage_order;
-    }
-
-    // Returns true if the queue contains no elements
-    @Override
-    public boolean isEmpty( ){
-        return false;
-    }
-
-    // Returns the number of elements in the queue
-    @Override
-    public  int queue_size( ){
-        return 0;
-    }
-
-    // Returns a string representation of the queue
-    @Override
-    public String toString( ){
-        return "";
-    }
-
-
-    /*How many items do you want to add? 2
-     * for(int i; i<2; i++){
-     *   String type = dropdown1.text()
-     *   String color = dropdown2.text()
-     *   String size = dropdown3.text()
-     *  
-     *   if java event button'confirm' clicked:
-     *      orderdetails += [type, size, color]
-     *      dropdown1 = ""
-     *      dropdown2 = ""
-     *      dropdown3 = ""
-     *      continue....
-     *   else if java even button'reset' clicked:
-     *      dropdown1 = ""
-     *      dropdown2 = ""
-     *      dropdown3 = ""
-     * }
-     *  
-     * then create the order instance and send orderdetails in as a parameter for it to be saved to the
-     * database.
-     */
-
-     //Function to edit an Order - to change details
-
-     //Function to Generate Order Number
-
-     //Function to calculate the price of an order
-
-     //Function to store orders in a queue and save the queue to a file
-     // - can utilize the delete as a 'pop' from the queue
-
-     //Function to view an order ticket that is highlighted
-     //that is when clicked - not hovered
-     //Will allow vaiables to be edited i.e status
-
-    //Mouse Listener
-    //private class MouseAdapter implements MouseListener{
-       // public void mouseClicked(MouseEvent evt) {
-        //    otableMouseClicked(evt);
-            
-        //}
-        
-    //}
-
-    /* 
-    private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {                                     
-        
-        // get the model from the jtable
-       DefaultTableModel model = (DefaultTableModel)jTable1.getModel();
-
-        // get the selected row index
-       int selectedRowIndex = jTable1.getSelectedRow();
-       
-        // set the selected row data into jtextfields
-       c_fname.setText(model.getValueAt(selectedRowIndex, 0).toString());
-       c_lname.setText(model.getValueAt(selectedRowIndex, 1).toString());
-       jTextFieldLN.setText(model.getValueAt(selectedRowIndex, 2).toString());
-       jTextFieldAGE.setText(model.getValueAt(selectedRowIndex, 3).toString());
-        
-    }     */                             
 
     //Button Listeners for: Back
     //method to add function to the back button
@@ -519,53 +361,37 @@ public class ManageOrderUserInterface extends JFrame implements OrderQueue{
 
                     String mode = courier_menu.getSelectedItem().toString();
 
-                    String id = nextID();
+                    Customer cust = new Customer(fname, lname, contact, address, email);
 
-                    //String fName, String lName, String id, String contact, String address, String email
-                    Customer cust = new Customer(fname, lname, id, contact, address, email);
-
-
-                    //Order Derail
+                    //Stock Detail
                     StockType type = StockType.valueOf(item_type_menu.getSelectedItem().toString());
                     ItemColor color = ItemColor.valueOf(item_color_menu.getSelectedItem().toString());
                     Size size = Size.valueOf(item_size_menu.getSelectedItem().toString());
                     
                     String[] temp = {type.name() + ", " + color.name() + ", " + size.name()};
-                    /*List<String[]> details = new ArrayList<String[]>();
-                    details.add(temp);
-                    for(int i=0;i<details.size();i++) System.out.println("MODEL TEST "+Arrays.toString(details.get(i)));*/
                     Stock details = null;
-                    if(customer_manager.findCustomer(cust.getID())!=null){
+                    Customer customer = customer_manager.findCustomer(fname, lname);
+                    if(customer!=null){
                         //Continue as normal
-                        ord = new Order(customer_manager.findCustomer(cust.getID()), counter2, mode, "Pending", details);
+                        ord = new Order(customer, counter2, mode, "Pending", details);
                     }
                     else{
                         //Customer customer, int item_count, CourierMode delMode, int ticket_num, OrderStatus status, List<String[]> details
+                        ManageCustomer.createCustomer(cust);
                         ord = new Order(cust, counter2, mode,"Pending", details);
                     }
-                    
+
                     try{
-                        FileWriter ofile = new FileWriter(new File("database/orders.txt"), true);
-                        FileWriter cfile = new FileWriter(new File("database/customers.txt"), true);
-
-                        String ostring = ord.toString();
-                        String cstring = cust.toString();
-                        System.out.println("ADDED VALUE "+ostring+"\nCustomer: "+cstring);
-                        ofile.write(ostring+"\n");
-                        cfile.write(cstring+"\n");
-
-                        ofile.close();
-                        cfile.close();
+                        ManageOrder.createOrder(ord, ManageStock.getIdFromItemName(item_type_menu.getSelectedItem().toString()));
+                        //if(model.getRowCount()>0) model.setRowCount(0);
+                        showTable((ArrayList<Order>)ManageOrder.getAllOrders());
                     }
-                    catch(IOException e){
+                    catch(Error e){
                         errormsg.setText("Recheck Input Values");
                     }
                 }
             }
         }
 	}
-
-     //JDropDownSelection Menu with sorts of: Ticket #, Customer ID,
-     //Successful Orders and Unsuccessful Orders - more of filter
 }
 

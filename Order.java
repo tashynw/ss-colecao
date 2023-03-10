@@ -21,12 +21,18 @@ public class Order {
         return customer.getFullName();
     }
 
+    public String getCustomerFirstName() { return this.customer.getFName(); }
+
+    public String getCustomerLastName() { return this.customer.getLName(); }
+
     public String getCustomerID(){
         return this.customer.getID();
     }
+
     public Stock getItem(){
         return this.order_detail;
     }
+
     public String getCustomerName(){
         return customer.getFullName();
     }
