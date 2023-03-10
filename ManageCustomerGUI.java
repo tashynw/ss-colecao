@@ -110,7 +110,7 @@ public class ManageCustomerGUI extends JFrame {
         cust_lnamelbl = new JLabel("Last Name: ");
         contLabel = new JLabel("Contact: ");
         address = new JLabel("Address: ");
-        emailLabel = new JLabel("Phone number: ");
+        emailLabel = new JLabel("Email: ");
         searchLabel = new JLabel("Search by First Name: ");
         errormsg = new JLabel("");
         errormsg.setBounds(20, 100, 400, 250);
@@ -242,6 +242,7 @@ public class ManageCustomerGUI extends JFrame {
                     }
 
                     try{
+                        model.setRowCount(0);
                         showTable((ArrayList<Customer>) ManageCustomer.getAllCustomers());
                     }
                     catch(Error e){
