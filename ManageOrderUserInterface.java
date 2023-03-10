@@ -61,36 +61,23 @@ public class ManageOrderUserInterface extends JFrame{
 
     //bottom Pane
     private JButton back;
-    private JButton details;
     private JButton addc;
     private JLabel logo;
-
-    private String[][] det;
-    private Order manageOrder;
-    private ManageStockUserInterface stock_manager;
-    private ManageCustomer customer_manager;
-    private List<Order> manageOrder_queue = new ArrayList<Order>();
 
     public ManageOrderUserInterface(){
         this.frame = this;
         //Font and Defaults
-        customer_manager = new ManageCustomer();
 
         Font f = new Font("Montserrat", Font.BOLD, 20);
         frame.setTitle("SS Colecao - Manage Orders");
 
-        //Search Bar
-        /*searchbar = new JTextField(15);
-        search_label = new JLabel("Search");*/
-
         //Table Setup
-        manageOrder_queue = ManageOrder.getAllOrders();
         String[] columnNames = {"Full Name", "Item Amount", "Status", "ItemName", "Total Price"};
 
         this.model = new DefaultTableModel(columnNames, 0);
-        otable = new JTable(model);
+        this.otable = new JTable(model);
         sort = new TableRowSorter<>(model);
-        showTable((ArrayList<Order>) manageOrder_queue);
+        showTable((ArrayList<Order>) ManageOrder.getAllOrders());
         otable.setRowSorter(sort);
         otable.setBounds(20, 30, 450, 450);
         pane = new JScrollPane(otable);
@@ -112,29 +99,6 @@ public class ManageOrderUserInterface extends JFrame{
 
         addc = new JButton("Add Coupon");
         addc.addActionListener(new ButtonListener());
-
-        /*searchbar.getDocument().addDocumentListener(new DocumentListener() {
-            @Override
-            public void insertUpdate(DocumentEvent e) {
-                search(searchbar.getText());
-            }
-            @Override
-            public void removeUpdate(DocumentEvent e) {
-                search(searchbar.getText());
-            }
-            @Override
-            public void changedUpdate(DocumentEvent e) {
-                search(searchbar.getText());
-            }
-            public void search(String str) {
-                if (str.length() == 0) {
-                    sort.setRowFilter(null);
-                } 
-                else{
-                    sort.setRowFilter(RowFilter.regexFilter(str));
-                }
-            }
-        });*/
 
         //Add Order Pane
         JPanel infoPanel = new JPanel(new GridLayout(6, 2, 10, 10));
@@ -238,7 +202,7 @@ public class ManageOrderUserInterface extends JFrame{
         reset_btn = new JButton("Reset");
         reset_btn.addActionListener(new ButtonListener());
 
-        cancel_btn = new JButton("Cancel");
+        cancel_btn = new JButton("Manage Customers");
         cancel_btn.addActionListener(new ButtonListener());
 
         confirm_btn = new JButton("Confirm Order");
@@ -282,9 +246,9 @@ public class ManageOrderUserInterface extends JFrame{
     }
 
     //Method to show orders in a list in GUI table display.
-    private void showTable(ArrayList<Order> olst){
+    public void showTable(ArrayList<Order> olst){
         if (olst.size()<=0) return;
-        for(int j = 0; olst.size()>j; j++)
+        for(int j = 0; j<olst.size(); j++)
             addToTable(olst.get(j));
     }
 
@@ -336,17 +300,14 @@ public class ManageOrderUserInterface extends JFrame{
             }
 
             if(eve.getSource()==cancel_btn){
-                background.setVisible(false);
-
-                MainMenu mscreen = new MainMenu(frame);
-                frame.add(mscreen);
-                mscreen.setVisible(true);
+                //background.setVisible(false);
+                ManageCustomerGUI manageCustomerScreen = new ManageCustomerGUI();
+                frame.add(manageCustomerScreen);
+                manageCustomerScreen.setVisible(true);
             }
 
             //confirm
             if(eve.getSource()==confirm_btn){
-                ManageCustomer.getAllCustomers();
-
                 if(c_fname.getText().isBlank() || c_lname.getText().isBlank() || cont.getText().isBlank() || add.getText().isBlank() || e_add.getText().isBlank() || countery2.getText().isBlank()){
                     errormsg.setText("Please fill out all the fields");
                 }
@@ -370,21 +331,20 @@ public class ManageOrderUserInterface extends JFrame{
                     
                     String[] temp = {type.name() + ", " + color.name() + ", " + size.name()};
                     Stock details = null;
-                    Customer customer = customer_manager.findCustomer(fname, lname);
+                    Customer customer = ManageCustomer.findCustomer(fname, lname);
                     if(customer!=null){
                         //Continue as normal
                         ord = new Order(customer, counter2, mode, "Pending", details);
                     }
                     else{
-                        //Customer customer, int item_count, CourierMode delMode, int ticket_num, OrderStatus status, List<String[]> details
                         ManageCustomer.createCustomer(cust);
                         ord = new Order(cust, counter2, mode,"Pending", details);
                     }
 
                     try{
                         ManageOrder.createOrder(ord, ManageStock.getIdFromItemName(item_type_menu.getSelectedItem().toString()));
-                        //if(model.getRowCount()>0) model.setRowCount(0);
                         showTable((ArrayList<Order>)ManageOrder.getAllOrders());
+                        model.fireTableDataChanged();
                     }
                     catch(Error e){
                         errormsg.setText("Recheck Input Values");

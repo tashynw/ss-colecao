@@ -42,25 +42,21 @@ public class ManageCustomerGUI extends JFrame {
     private JTextField add;
     private JTextField doB;
     private JLabel logo;
-    private ManageCustomer customer_manager;
-    private List<Customer> manage_customerqueue = new ArrayList<Customer>();
 
     public ManageCustomerGUI() {
         this.frame = this;
         // Font and Defaults
-        customer_manager = new ManageCustomer();
 
         Font f = new Font("Montserrat", Font.BOLD, 28);
         frame.setTitle("SS Colecao - Manage Customers");
 
         // Table Setup
-        manage_customerqueue = ManageCustomer.getAllCustomers();
         String[] columnNames = { "Last Name", "First Name", "Address" };
 
         this.model = new DefaultTableModel(columnNames, 0);
         otable = new JTable(model);
         sort = new TableRowSorter<>(model);
-        showTable((List<Customer>) manage_customerqueue);
+        showTable((List<Customer>) ManageCustomer.getAllCustomers());
         // otable.setRowSorter(sort);
         otable.setBounds(20, 30, 450, 450);
         pane = new JScrollPane(otable);

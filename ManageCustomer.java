@@ -11,9 +11,7 @@ import java.nio.channels.NetworkChannel;
 
 
 public class ManageCustomer {
-    public ManageCustomer(){
-
-    }
+    public ManageCustomer(){}
 
     public static Customer findCustomer(String firstName, String lastName){
         Customer customer = null;
