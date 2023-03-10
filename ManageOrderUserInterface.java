@@ -346,6 +346,7 @@ public class ManageOrderUserInterface extends JFrame{
 
                     try{
                         ManageOrder.createOrder(ord, ManageStock.getIdFromItemName(item_type_menu.getSelectedItem().toString()));
+                        model.setRowCount(0);
                         showTable((ArrayList<Order>) ManageOrder.getAllOrders());
                     }
                     catch(Error e){
