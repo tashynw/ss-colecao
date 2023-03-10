@@ -5,10 +5,10 @@ import java.awt.event.*;
 import java.awt.*;
 import java.util.List;
 import java.awt.Color;
-
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 import javax.swing.text.JTextComponent;
+import java.awt.event.ActionListener;
 
 import java.util.*;
 
@@ -41,11 +41,7 @@ public class ManageCustomerGUI extends JFrame {
     private JTextField cont;
     private JTextField add;
     private JTextField doB;
-    private JTextField e_mail;
-    private JTextComponent e_add;
     private JLabel logo;
-
-    private String[][] det;
     private ManageCustomer customer_manager;
     private List<Customer> manage_customerqueue = new ArrayList<Customer>();
 
@@ -74,8 +70,6 @@ public class ManageCustomerGUI extends JFrame {
         // Order Table Display
         table = new JPanel();
         table.setBackground(Color.GRAY);
-        // table.add(search_label);
-        // table.add(searchbar);
         table.add(pane);
 
         // Add Order Pane
@@ -114,7 +108,6 @@ public class ManageCustomerGUI extends JFrame {
         cust_lnamelbl = new JLabel("Last Name: ");
         address = new JLabel("Address: ");
         dob = new JLabel("Date of Birth: ");
-
         errormsg = new JLabel("");
         errormsg.setBounds(20, 100, 400, 250);
 
@@ -124,15 +117,12 @@ public class ManageCustomerGUI extends JFrame {
         cont = new JTextField(4);
         add = new JTextField(4);
         doB = new JTextField(4);
-        // countery2 = new JTextField(4);
 
         // Add to Cinfo Panel
         cinfoPanel.setBorder(new TitledBorder("Customer Information"));
         cinfoPanel.setBounds(50, 100, 400, 250);
-
         cinfoPanel.add(cust_fname);
         cinfoPanel.add(c_fname);
-
         cinfoPanel.add(cust_lnamelbl);
         cinfoPanel.add(c_lname);
         cinfoPanel.add(address);
@@ -188,4 +178,10 @@ public class ManageCustomerGUI extends JFrame {
 
     }
 
+    private class ButtonListener implements ActionListener {
+        public void actionPerformed(ActionEvent eve) {
+            // PLEASE COMPLETE THE IMPLEMENTATION OF THE BUTTONS
+            // WE HAVE ADD, DELETE, SAVE, SORT
+        }
+    }
 }
