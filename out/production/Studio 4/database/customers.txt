@@ -1,10 +1,2 @@
 620148438, Tiffany, Parkinson, Feb/18/2002, 8763409204, tiffanyparkinson18@gmail.com, 101 Wallpark Street0, Shane, Smith, 10003444, shane@gmail.com, someplace0, Tashyn, Wallace, 37463439, tashyn1@mailsac.com, Yam back Road
-0, Tashyn, Wallace, 37463439, tashyn1@mailsac.com, Yam back Road
-0, Tashyn, Wallace, hfehfieh, egegege, gegeg
-0, Tashyn, Wallace, 353535, 3535353, 535353
-0, Tashyn, Wallace, 43434343, 3535353, 353535
-0, Tashyn, Wallace, 5353533, rg3g35g3, 5353g44
-0, Tashyn, Wallace, 343434343, rgrgrg, rgrgrgr
-0, Tashyn, Wallace, 35353, 3535335, 35353
-0, Tashyn, Wallace, 3535353, 44224t42t, g4gg4 g4 4g4g4g4
-0, Tashyn, Wallace, t4t4t4g4g 44g, 4g4g4g4g4, 4g4g4g4 4gg4g4g
+

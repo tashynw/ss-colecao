@@ -76,9 +76,7 @@ public class ManageOrderUserInterface extends JFrame{
 
         this.model = new DefaultTableModel(columnNames, 0);
         this.otable = new JTable(model);
-        sort = new TableRowSorter<>(model);
         showTable((ArrayList<Order>) ManageOrder.getAllOrders());
-        otable.setRowSorter(sort);
         otable.setBounds(20, 30, 450, 450);
         pane = new JScrollPane(otable);
         pane.setViewportView(otable);
@@ -246,8 +244,16 @@ public class ManageOrderUserInterface extends JFrame{
     }
 
     //Method to show orders in a list in GUI table display.
-    public void showTable(ArrayList<Order> olst){
-        if (olst.size()<=0) return;
+    private void showTable(ArrayList<Order> olst){
+        /*if (olst.size()<=0) return;
+        for(int j = 0; j<olst.size(); j++)
+            addToTable(olst.get(j));*/
+        if (olst == null || olst.isEmpty()) return;
+        if (model == null) {
+            String[] columnNames = {"Full Name", "Item Amount", "Status", "ItemName", "Total Price"};
+            model = new DefaultTableModel(columnNames, 0);
+            otable.setModel(model);
+        }
         for(int j = 0; j<olst.size(); j++)
             addToTable(olst.get(j));
     }
@@ -262,7 +268,6 @@ public class ManageOrderUserInterface extends JFrame{
 
         String[] item= {full, String.valueOf(amt), stat, itemName, totalCost};
         model.addRow(item);
-
     }
 
     //Button Listeners for: Back
@@ -300,9 +305,7 @@ public class ManageOrderUserInterface extends JFrame{
             }
 
             if(eve.getSource()==cancel_btn){
-                //background.setVisible(false);
                 ManageCustomerGUI manageCustomerScreen = new ManageCustomerGUI();
-                frame.add(manageCustomerScreen);
                 manageCustomerScreen.setVisible(true);
             }
 
@@ -343,8 +346,7 @@ public class ManageOrderUserInterface extends JFrame{
 
                     try{
                         ManageOrder.createOrder(ord, ManageStock.getIdFromItemName(item_type_menu.getSelectedItem().toString()));
-                        showTable((ArrayList<Order>)ManageOrder.getAllOrders());
-                        model.fireTableDataChanged();
+                        showTable((ArrayList<Order>) ManageOrder.getAllOrders());
                     }
                     catch(Error e){
                         errormsg.setText("Recheck Input Values");

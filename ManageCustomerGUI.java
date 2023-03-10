@@ -27,20 +27,25 @@ public class ManageCustomerGUI extends JFrame {
 
     private JLabel cust_fname;
     private JLabel cust_lnamelbl;
+    private JLabel contLabel;
     private JLabel address;
-    private JLabel dob;
+    private JLabel emailLabel;
     private JLabel errormsg;
+    private JLabel searchLabel;
 
     private JButton addButton;
     private JButton deleteButton;
-    private JButton saveButton;
+    private JButton resetButton;
     private JButton sortButton;
+    private JButton searchButton;
+    private boolean sortDescending;
 
     private JTextField c_fname;
     private JTextField c_lname;
     private JTextField cont;
     private JTextField add;
-    private JTextField doB;
+    private JTextField email;
+    private JTextField searchText;
     private JLabel logo;
 
     public ManageCustomerGUI() {
@@ -51,13 +56,14 @@ public class ManageCustomerGUI extends JFrame {
         frame.setTitle("SS Colecao - Manage Customers");
 
         // Table Setup
-        String[] columnNames = { "Last Name", "First Name", "Address" };
+        String[] columnNames = { "First Name", "Last Name", "Address", "Contact", "Email" };
 
         this.model = new DefaultTableModel(columnNames, 0);
         otable = new JTable(model);
         sort = new TableRowSorter<>(model);
         showTable((List<Customer>) ManageCustomer.getAllCustomers());
-        // otable.setRowSorter(sort);
+        this.sortDescending = false;
+        //otable.setRowSorter(sort);
         otable.setBounds(20, 30, 450, 450);
         pane = new JScrollPane(otable);
         pane.setViewportView(otable);
@@ -83,8 +89,8 @@ public class ManageCustomerGUI extends JFrame {
         addOrder.add(logo);
 
         // Button
-        saveButton = new JButton("Save");
-        saveButton.addActionListener(new ButtonListener());
+        resetButton = new JButton("Reset");
+        resetButton.addActionListener(new ButtonListener());
         addButton = new JButton("Add Customer");
         addButton.addActionListener(new ButtonListener());
         deleteButton = new JButton("Delete");
@@ -102,8 +108,10 @@ public class ManageCustomerGUI extends JFrame {
         // Customer Information
         cust_fname = new JLabel("First Name: ");
         cust_lnamelbl = new JLabel("Last Name: ");
+        contLabel = new JLabel("Contact: ");
         address = new JLabel("Address: ");
-        dob = new JLabel("Date of Birth: ");
+        emailLabel = new JLabel("Phone number: ");
+        searchLabel = new JLabel("Search by First Name: ");
         errormsg = new JLabel("");
         errormsg.setBounds(20, 100, 400, 250);
 
@@ -112,8 +120,10 @@ public class ManageCustomerGUI extends JFrame {
         c_lname = new JTextField(4);
         cont = new JTextField(4);
         add = new JTextField(4);
-        doB = new JTextField(4);
-
+        email = new JTextField(4);
+        searchText = new JTextField(4);
+        searchButton = new JButton("Search");
+        searchButton.addActionListener(new ButtonListener());
         // Add to Cinfo Panel
         cinfoPanel.setBorder(new TitledBorder("Customer Information"));
         cinfoPanel.setBounds(50, 100, 400, 250);
@@ -121,14 +131,22 @@ public class ManageCustomerGUI extends JFrame {
         cinfoPanel.add(c_fname);
         cinfoPanel.add(cust_lnamelbl);
         cinfoPanel.add(c_lname);
+        cinfoPanel.add(contLabel);
+        cinfoPanel.add(cont);
         cinfoPanel.add(address);
         cinfoPanel.add(add);
-        cinfoPanel.add(dob);
-        cinfoPanel.add(doB);
-        cinfoPanel.add(saveButton);
+        cinfoPanel.add(emailLabel);
+        cinfoPanel.add(email);
+        cinfoPanel.add(resetButton);
         cinfoPanel.add(sortButton);
         cinfoPanel.add(addButton);
         cinfoPanel.add(deleteButton);
+
+        infoPanel.setBorder( new TitledBorder(""));
+        infoPanel.setBounds(20, 350, 400, 200);
+        infoPanel.add(searchLabel);
+        infoPanel.add(searchText);
+        infoPanel.add(searchButton);
 
         // Add to addOrder Panel
         addOrder.add(addl);
@@ -168,16 +186,86 @@ public class ManageCustomerGUI extends JFrame {
         String lname = c.getLName();
         String fname = c.getFName();
         String addr = c.getAddress();
+        String contact = c.getContact();
+        String email = c.getEmail();
 
-        String[] item = { lname, fname, addr };
+        String[] item = { fname, lname, addr, contact, email };
         model.addRow(item);
-
     }
 
     private class ButtonListener implements ActionListener {
         public void actionPerformed(ActionEvent eve) {
             // PLEASE COMPLETE THE IMPLEMENTATION OF THE BUTTONS
             // WE HAVE ADD, DELETE, SAVE, SORT
+            if (eve.getSource()==resetButton){
+                c_fname.setText("");
+                c_lname.setText("");
+                cont.setText("");
+                add.setText("");
+                email.setText("");
+                model.setRowCount(0);
+                showTable(ManageCustomer.getAllCustomers());
+            }
+
+            if (eve.getSource()==sortButton){
+                sort.setModel(model);
+                otable.setRowSorter(sort);
+                sortDescending=!sortDescending;
+                if (sortDescending==true) {
+                    sort.setSortKeys(Arrays.asList(new RowSorter.SortKey(0, SortOrder.DESCENDING)));
+                } else{
+                    sort.setSortKeys(Arrays.asList(new RowSorter.SortKey(0, SortOrder.ASCENDING)));
+                }
+                sort.sort();
+            }
+
+            if(eve.getSource()==addButton){
+                if(c_fname.getText().isBlank() || c_lname.getText().isBlank() || cont.getText().isBlank() || add.getText().isBlank() || email.getText().isBlank()){
+                    errormsg.setText("Please fill out all the fields");
+                }
+                else{
+                    Order ord;
+                    String fname = c_fname.getText();
+                    String lname = c_lname.getText();
+                    String contact = cont.getText();
+                    String address = add.getText();
+                    String emailText = email.getText();
+
+                    Customer cust = new Customer(fname, lname, contact, address, emailText);
+
+                    Customer customer = ManageCustomer.findCustomer(fname, lname);
+                    if(customer!=null){
+                        errormsg.setText("Customer already present");
+                    }
+                    else{
+                        ManageCustomer.createCustomer(cust);
+                    }
+
+                    try{
+                        showTable((ArrayList<Customer>) ManageCustomer.getAllCustomers());
+                    }
+                    catch(Error e){
+                        errormsg.setText("Recheck Input Values");
+                    }
+                }
+            }
+
+            if(eve.getSource()==searchButton){
+                if(searchText.getText().isBlank()){
+                    errormsg.setText("Please fill out all the fields");
+                }
+                else{
+                    String fname = searchText.getText();
+
+                    try{
+                        model.setRowCount(0);
+                        showTable((ArrayList<Customer>) ManageCustomer.searchCustomerFromFirstName(fname));
+                    }
+                    catch(Error e){
+                        errormsg.setText("Recheck Input Values");
+                    }
+                }
+            }
         }
     }
 }

@@ -143,4 +143,35 @@ public class ManageCustomer {
         }
     }
 
+    public static List<Customer> searchCustomerFromFirstName(String firstName){
+        String id = null;
+        try{
+            Class.forName("com.mysql.cj.jdbc.Driver");
+
+            Statement stmt = null;
+            ResultSet rs = null;
+            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/ss_colecao?" + "user=root&password=password!23");
+
+            stmt = conn.createStatement();
+            rs = stmt.executeQuery(String.format("SELECT * from Customers WHERE firstName LIKE '%%%s%%';", firstName));
+            List<Customer> customerList = new ArrayList<>();
+            while(rs.next()){
+                customerList.add(
+                        new Customer(
+                                rs.getString("firstName"),
+                                rs.getString("lastName"),
+                                rs.getString("phone_number"),
+                                rs.getString("address"),
+                                rs.getString("email")
+                        )
+                );
+            }
+            System.out.println("RESULT "+customerList);
+            return customerList;
+        } catch(Error | SQLException | ClassNotFoundException e){
+            System.out.println("DB ERROR searchCustomerFromFirstName()"+e);
+            return new ArrayList<>();
+        }
+    }
+
 }
