@@ -111,7 +111,6 @@ public class ManageCustomer {
 
             stmt = conn.createStatement();
             int rowsAffected = stmt.executeUpdate(String.format("INSERT INTO Customers (firstName, lastName, address, phone_number, email) VALUES ('%s','%s','%s','%s','%s')", newCustomer.getFName(), newCustomer.getLName(), newCustomer.getAddress(), newCustomer.getContact(), newCustomer.getEmail()));
-            System.out.println("TEST");
             return true;
         } catch(Error | SQLException | ClassNotFoundException e){
             System.out.println("DB ERROR createCustomer()"+e);

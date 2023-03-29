@@ -7,14 +7,16 @@ public class Order {
     private String deliveryMode;
     private Stock order_detail;
     private String status;
+    private double totalPrice;
 
     //Constructor
-    public Order(Customer customer, int item_count, String delMode, String status, Stock details){
+    public Order(Customer customer, int item_count, String delMode, String status, Stock details, Double totalPrice){
         this.customer = customer;
         this.item_count = item_count;
         this.status = status;
         this.deliveryMode = delMode;
         this.order_detail = details;
+        this.totalPrice = totalPrice;
     }
 
     public String getOwner(){
@@ -48,4 +50,6 @@ public class Order {
     public String getStatus(){
         return this.status;
     }
+
+    public Double getTotalPrice() { return this.totalPrice; }
 }

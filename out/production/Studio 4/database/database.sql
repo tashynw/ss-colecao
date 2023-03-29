@@ -57,15 +57,28 @@ CREATE TABLE Orders(
     item_count int,
     deliver_mode varchar(255),
     status varchar(255),
+    totalprice float,
     FOREIGN KEY (customer_id) REFERENCES Customers(customer_id),
     FOREIGN KEY (stock_id) REFERENCES Stocks(stock_id)
 );
 
 -- Add an order for customer with ID 1, purchasing 2 units of stock item with ID 1
-INSERT INTO Orders (customer_id, stock_id, item_count, deliver_mode, status)
+INSERT INTO Orders (customer_id, stock_id, item_count, deliver_mode, status, totalprice)
 VALUES (
-    1, 1, 2, 'Standard', 'Pending'
+    1, 1, 2, 'Standard', 'Pending', 24000
 ),(
-    2, 2, 1, 'Express', 'Pending'
+    2, 2, 1, 'Express', 'Pending', 25000
 );
 
+/*Creating Coupons table*/
+CREATE TABLE Coupons(
+    coupon_id int PRIMARY KEY AUTO_INCREMENT,
+    order_id int,
+    coupon_percentage float,
+    FOREIGN KEY (order_id) REFERENCES Orders(order_id)
+);
+
+INSERT INTO Coupons (coupon_id, order_id, coupon_percentage)
+VALUES 
+(1, 1, 0.85),
+(2, 2, 0.9);

@@ -3,16 +3,12 @@ import javax.swing.border.TitledBorder;
 import java.awt.event.*;
 
 import java.awt.*;
-import java.util.List;
 import java.awt.Color;
 
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 
 import java.util.*;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 
 public class ManageOrderUserInterface extends JFrame{
     //Instance Variables/Attributes
@@ -72,11 +68,11 @@ public class ManageOrderUserInterface extends JFrame{
         frame.setTitle("SS Colecao - Manage Orders");
 
         //Table Setup
-        String[] columnNames = {"Full Name", "Item Amount", "Status", "ItemName", "Total Price"};
+        String[] columnNames = {"Order ID","Full Name", "Item Amount", "Status", "ItemName", "Total Price"};
 
         this.model = new DefaultTableModel(columnNames, 0);
         this.otable = new JTable(model);
-        showTable((ArrayList<Order>) ManageOrder.getAllOrders());
+        showTable((ArrayList<Object[]>) ManageOrder.getAllOrders());
         otable.setBounds(20, 30, 450, 450);
         pane = new JScrollPane(otable);
         pane.setViewportView(otable);
@@ -244,13 +240,10 @@ public class ManageOrderUserInterface extends JFrame{
     }
 
     //Method to show orders in a list in GUI table display.
-    private void showTable(ArrayList<Order> olst){
-        /*if (olst.size()<=0) return;
-        for(int j = 0; j<olst.size(); j++)
-            addToTable(olst.get(j));*/
+    public void showTable(ArrayList<Object[]> olst){
         if (olst == null || olst.isEmpty()) return;
         if (model == null) {
-            String[] columnNames = {"Full Name", "Item Amount", "Status", "ItemName", "Total Price"};
+            String[] columnNames = {"Order ID","Full Name", "Item Amount", "Status", "ItemName", "Total Price"};
             model = new DefaultTableModel(columnNames, 0);
             otable.setModel(model);
         }
@@ -259,14 +252,15 @@ public class ManageOrderUserInterface extends JFrame{
     }
 
     //Function to add a row to the table
-    private void addToTable(Order o){
-        String full = o.getCustomerName();
-        int amt = o.getItemCount();
-        String stat = o.getStatus();
-        String itemName = o.getItem().getStockType().name();
-        String totalCost = String.valueOf(Float.parseFloat(ManageStock.getPriceFromItemName(itemName)) * amt);
+    private void addToTable(Object[] o){
+        String orderId = (String)o[0];
+        String full = ((Order)o[1]).getCustomerName();
+        int amt = ((Order)o[1]).getItemCount();
+        String stat = ((Order)o[1]).getStatus();
+        String itemName = ((Order)o[1]).getItem().getStockType().name();
+        String totalCost = String.format("%.2f", ((Order)o[1]).getTotalPrice());
 
-        String[] item= {full, String.valueOf(amt), stat, itemName, totalCost};
+        String[] item= {orderId,full, String.valueOf(amt), stat, itemName, totalCost};
         model.addRow(item);
     }
 
@@ -287,11 +281,13 @@ public class ManageOrderUserInterface extends JFrame{
             //add coupon
             //back
             if(eve.getSource()==addc){
-                background.setVisible(false);
-
-                AdministerCoupons ascreen = new AdministerCoupons(frame);
-                frame.add(ascreen);
-                ascreen.setVisible(true);   
+                int selectedRowIndex = otable.getSelectedRow();
+                if(selectedRowIndex!=-1){
+                    Object[] rowData = model.getDataVector().elementAt(otable.convertRowIndexToModel(selectedRowIndex)).toArray();
+                    Order selectedOrder = ManageOrder.findOrder((String)rowData[0]);
+                    AddCouponUserInterface couponScreen = new AddCouponUserInterface((String)rowData[0],selectedOrder);
+                    couponScreen.setVisible(true);
+                }
             }
 
             //reset btn
@@ -302,6 +298,8 @@ public class ManageOrderUserInterface extends JFrame{
                 add.setText("");
                 e_add.setText("");
                 countery2.setText("");
+                model.setRowCount(0);
+                showTable((ArrayList<Object[]>) ManageOrder.getAllOrders());
             }
 
             if(eve.getSource()==cancel_btn){
@@ -337,17 +335,17 @@ public class ManageOrderUserInterface extends JFrame{
                     Customer customer = ManageCustomer.findCustomer(fname, lname);
                     if(customer!=null){
                         //Continue as normal
-                        ord = new Order(customer, counter2, mode, "Pending", details);
+                        ord = new Order(customer, counter2, mode, "Pending", details, (double) Double.parseDouble(ManageStock.getPriceFromItemName(type.toString()))*counter2);
                     }
                     else{
                         ManageCustomer.createCustomer(cust);
-                        ord = new Order(cust, counter2, mode,"Pending", details);
+                        ord = new Order(cust, counter2, mode,"Pending", details, (double) Double.parseDouble(ManageStock.getPriceFromItemName(type.toString()))*counter2);
                     }
 
                     try{
                         ManageOrder.createOrder(ord, ManageStock.getIdFromItemName(item_type_menu.getSelectedItem().toString()));
                         model.setRowCount(0);
-                        showTable((ArrayList<Order>) ManageOrder.getAllOrders());
+                        showTable((ArrayList<Object[]>) ManageOrder.getAllOrders());
                     }
                     catch(Error e){
                         errormsg.setText("Recheck Input Values");

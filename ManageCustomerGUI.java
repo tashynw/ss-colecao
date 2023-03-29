@@ -170,7 +170,6 @@ public class ManageCustomerGUI extends JFrame {
         frame.add(background);
         pack();
         setVisible(true);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
     // Method to show orders in a list in GUI table display.
@@ -195,8 +194,6 @@ public class ManageCustomerGUI extends JFrame {
 
     private class ButtonListener implements ActionListener {
         public void actionPerformed(ActionEvent eve) {
-            // PLEASE COMPLETE THE IMPLEMENTATION OF THE BUTTONS
-            // WE HAVE ADD, DELETE, SAVE, SORT
             if (eve.getSource()==resetButton){
                 c_fname.setText("");
                 c_lname.setText("");
