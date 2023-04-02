@@ -331,7 +331,7 @@ public class ManageOrderUserInterface extends JFrame{
                     Size size = Size.valueOf(item_size_menu.getSelectedItem().toString());
                     
                     String[] temp = {type.name() + ", " + color.name() + ", " + size.name()};
-                    Stock details = null;
+                    Stock details = ManageStock.findStock(type.name());
                     Customer customer = ManageCustomer.findCustomer(fname, lname);
                     if(customer!=null){
                         //Continue as normal

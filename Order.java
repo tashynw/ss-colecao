@@ -39,6 +39,8 @@ public class Order {
         return customer.getFullName();
     }
 
+    public Customer getCustomer(){ return this.customer; }
+
     public int getItemCount(){
         return this.item_count;
     }
@@ -52,4 +54,6 @@ public class Order {
     }
 
     public Double getTotalPrice() { return this.totalPrice; }
+
+    public String detailedString() { return "Name - " + this.order_detail.getStockType().name() + "\n<br>Quantity - " +this.getItemCount()+"\n<br>Price - "+this.order_detail.getPrice(); }
 }
