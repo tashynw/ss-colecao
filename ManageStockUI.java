@@ -36,7 +36,7 @@ public class ManageStockUI extends JFrame {
     private JLabel searchLabel;
     private JLabel errormsg;
 
-    private JButton submit_btn;
+    private JButton back_btn;
     private JButton reset_btn;
     private JButton delete_btn;
     private JButton confirm_btn;
@@ -50,7 +50,6 @@ public class ManageStockUI extends JFrame {
     private JTextField searchText;
 
     //bottom Pane
-    private JButton back;
     private JLabel logo;
 
     public ManageStockUI(){
@@ -83,9 +82,6 @@ public class ManageStockUI extends JFrame {
         table = new JPanel();
         table.setBackground(Color.GRAY);
         table.add(pane);
-
-        back = new JButton("Back");
-        back.addActionListener(new ButtonListener());
 
         //Add Order Pane
         JPanel infoPanel = new JPanel(new GridLayout(6, 2, 10, 10));
@@ -155,10 +151,10 @@ public class ManageStockUI extends JFrame {
         infoPanel.add(itemPriceText);
 
         //Button For Order Confirmation and Deleting
-        submit_btn = new JButton("Submit");
+        back_btn = new JButton("Back");
         submit_btn.addActionListener(new ButtonListener());
 
-        reset_btn = new JButton("Reset");
+        back_btn = new JButton("Reset");
         reset_btn.addActionListener(new ButtonListener());
 
         delete_btn = new JButton("Delete");
@@ -167,7 +163,7 @@ public class ManageStockUI extends JFrame {
         confirm_btn = new JButton("Confirm Stock");
         confirm_btn.addActionListener(new ButtonListener());
 
-        infoPanel.add(submit_btn);
+        infoPanel.add(back_btn);
         infoPanel.add(reset_btn);
         infoPanel.add(delete_btn);
         infoPanel.add(confirm_btn);
@@ -190,7 +186,6 @@ public class ManageStockUI extends JFrame {
         //Control Panel
 		JPanel mainPanel = new JPanel(new GridLayout(1, 2, 1, 0));
 		mainPanel.setBackground(new Color(22, 22, 21));
-        table.add(back);
         mainPanel.add(table);
         mainPanel.add(addStock);
 
@@ -232,16 +227,12 @@ public class ManageStockUI extends JFrame {
 
 	private class ButtonListener implements ActionListener{
 		public void actionPerformed(ActionEvent eve) {
-            if(eve.getSource()==back){
+            if(eve.getSource()==back_btn){
                 setVisible(false);
 
                 MainMenu mscreen = new MainMenu();
                 //frame.add(mscreen);
                 mscreen.setVisible(true);   
-            }
-            
-            if(eve.getSource()==submit_btn){
-
             }
 
             if(eve.getSource()==reset_btn){

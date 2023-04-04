@@ -24,7 +24,7 @@ public class MainMenu extends JFrame{
 		header = new JPanel();
 		header.setOpaque(false);
 		header.setBounds(0, 60, 910, 100);
-		JLabel name = new JLabel("Main Menu");
+		JLabel name = new JLabel("SS Colecao Main Menu");
 		name.setForeground(new Color(251, 192, 68));
 		name.setFont(f);
 		header.add(name);
