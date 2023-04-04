@@ -15,6 +15,7 @@ public class ManageOrder {
             stmt = conn.createStatement();
             int rowsAffected = stmt.executeUpdate(String.format("INSERT INTO Orders (customer_id, stock_id, item_count, deliver_mode, status, totalprice) VALUES ('%s','%s','%s','%s','%s', '%s')", ManageCustomer.getIdFromCustomerName(newOrder.getCustomerFirstName(), newOrder.getCustomerLastName()), stockId, newOrder.getItemCount(), newOrder.getMode(), newOrder.getStatus(), newOrder.getTotalPrice()));
             EmailService.sendOrderCreatedEmail(newOrder);
+            AdministerInvoice.createInvoice(newOrder);
             return true;
         } catch(Error | SQLException | ClassNotFoundException e){
             System.out.println("DB ERROR "+e);
