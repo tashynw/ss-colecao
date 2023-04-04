@@ -271,9 +271,11 @@ public class ManageOrderUserInterface extends JFrame{
 		{
             //back
             if(eve.getSource()==back){
-                //temporarily
-                ManageStockUI manageStockUI = new ManageStockUI();
-                manageStockUI.setVisible(true);
+                setVisible(false);
+
+                MainMenu mscreen = new MainMenu();
+                //frame.add(mscreen);
+                mscreen.setVisible(true);
             }
 
             //add coupon
@@ -324,12 +326,12 @@ public class ManageOrderUserInterface extends JFrame{
                     Customer cust = new Customer(fname, lname, contact, address, email);
 
                     //Stock Detail
-                    StockType type = StockType.valueOf(item_type_menu.getSelectedItem().toString());
-                    ItemColor color = ItemColor.valueOf(item_color_menu.getSelectedItem().toString());
-                    Size size = Size.valueOf(item_size_menu.getSelectedItem().toString());
+                    String type = String.valueOf(item_type_menu.getSelectedItem().toString());
+                    String color = String.valueOf(item_color_menu.getSelectedItem().toString());
+                    String size = String.valueOf(item_size_menu.getSelectedItem().toString());
                     
-                    String[] temp = {type.name() + ", " + color.name() + ", " + size.name()};
-                    Stock details = ManageStock.findStock(type.name());
+                    String[] temp = {type + ", " + color + ", " + size};
+                    Stock details = ManageStock.findStock(type);
                     Customer customer = ManageCustomer.findCustomer(fname, lname);
                     if(customer!=null){
                         //Continue as normal

@@ -34,7 +34,7 @@ public class ManageCustomerGUI extends JFrame {
     private JLabel searchLabel;
 
     private JButton addButton;
-    private JButton deleteButton;
+    private JButton backButton;
     private JButton resetButton;
     private JButton sortButton;
     private JButton searchButton;
@@ -93,8 +93,8 @@ public class ManageCustomerGUI extends JFrame {
         resetButton.addActionListener(new ButtonListener());
         addButton = new JButton("Add Customer");
         addButton.addActionListener(new ButtonListener());
-        deleteButton = new JButton("Delete");
-        deleteButton.addActionListener(new ButtonListener());
+        backButton = new JButton("Back");
+        backButton.addActionListener(new ButtonListener());
         sortButton = new JButton("Sort");
         sortButton.addActionListener(new ButtonListener());
 
@@ -140,7 +140,7 @@ public class ManageCustomerGUI extends JFrame {
         cinfoPanel.add(resetButton);
         cinfoPanel.add(sortButton);
         cinfoPanel.add(addButton);
-        cinfoPanel.add(deleteButton);
+        cinfoPanel.add(backButton);
 
         infoPanel.setBorder( new TitledBorder(""));
         infoPanel.setBounds(20, 350, 400, 200);
@@ -246,6 +246,14 @@ public class ManageCustomerGUI extends JFrame {
                         errormsg.setText("Recheck Input Values");
                     }
                 }
+            }
+
+            if(eve.getSource()==backButton){
+                setVisible(false);
+
+                MainMenu mscreen = new MainMenu();
+                //frame.add(mscreen);
+                mscreen.setVisible(true);
             }
 
             if(eve.getSource()==searchButton){

@@ -4,21 +4,21 @@ import java.awt.*;
 import java.awt.Color; 
 import java.awt.event.*;
 
-public class MainMenu extends JPanel{
+public class MainMenu extends JFrame{
     //Instance Variables/Attributes
     private JPanel navbar;
     private JLabel background;
     private JFrame frame;
     private JPanel header;
-    private JButton notif, stock, order, deliv, back, cust;
+    private JButton stock, order, cust;
     private JPanel leftPanel;
     private JPanel rightPanel;
     private JPanel midPanel;
     
-    public MainMenu(JFrame frame){
+    public MainMenu(){
+        this.frame = this;
         frame.setTitle("SS Colecao Main Menu");
         Font f = new Font("Montserrat", Font.BOLD, 45);
-		this.frame = frame;
 
         //Header
 		header = new JPanel();
@@ -69,46 +69,20 @@ public class MainMenu extends JPanel{
 		order.setBackground(new Color(55, 55, 54));
 		order.addActionListener(new ButtonListener());
 
-        //Manage Deliveries
-        deliv = new JButton("Manage Deliveries");
-        deliv.setBounds(25, 188, 200, 60);
-		deliv.setForeground(Color.WHITE);
-		deliv.setBackground(new Color(55, 55, 54));
-		deliv.addActionListener(new ButtonListener());
 
         //Manage Customers
         cust = new JButton("Manage Customers");
-        cust.setBounds(25, 276, 200, 60);
+        cust.setBounds(25, 200, 190, 60);
 		cust.setForeground(Color.WHITE);
 		cust.setBackground(new Color(55, 55, 54));
 		cust.addActionListener(new ButtonListener());
 
         //--------------------------------------------------------
 
-        //Manage Notifications
-        notif = new JButton("Notifications");
-        notif.setBounds(25, 12, 200, 60);
-		notif.setForeground(Color.WHITE);
-		notif.setBackground(new Color(55, 55, 54));
-		notif.addActionListener(new ButtonListener());
 
-        //Back Button
-        back = new JButton("Logout");
-        back.setBounds(25, 100, 200, 60);
-		back.setForeground(Color.BLACK);
-		back.setBackground(Color.WHITE);
-		back.addActionListener(new ButtonListener());
-		back.addActionListener(new LogoutListener());
-
-
-        //.add(notif);
         leftPanel.add(stock);
         leftPanel.add(order);
-        leftPanel.add(deliv);
         leftPanel.add(cust);
-
-        rightPanel.add(notif);
-        rightPanel.add(back);
 
         leftPanel.add(new JLabel(""));
         rightPanel.add(new JLabel(""));
@@ -126,6 +100,10 @@ public class MainMenu extends JPanel{
         background.add(leftPanel);
         background.add(rightPanel);
 		frame.add(background);
+
+        setVisible(true);
+        pack();
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
     //method to add function to the menu buttons
@@ -133,8 +111,6 @@ public class MainMenu extends JPanel{
 	{
 		public void actionPerformed(ActionEvent eve)
 		{
-			//Notifications
-            //if(eve.getSource()==notif){}
 
             //Stock Management
             if(eve.getSource()==stock){
@@ -142,7 +118,6 @@ public class MainMenu extends JPanel{
                 background.setVisible(false);
 
                 ManageStockUI sscreen = new ManageStockUI();
-                add(sscreen);
                 sscreen.setVisible(true);   
             }
 
@@ -151,9 +126,8 @@ public class MainMenu extends JPanel{
                 navbar.setVisible(false);
                 background.setVisible(false);
 
-                /*ManageOrders oscreen = new ManageOrders(frame);
-                add(oscreen);
-                oscreen.setVisible(true);*/
+                ManageOrderUserInterface oscreen = new ManageOrderUserInterface();
+                oscreen.setVisible(true);
             }
 
             //Customer Management
@@ -161,8 +135,7 @@ public class MainMenu extends JPanel{
                 navbar.setVisible(false);
                 background.setVisible(false);
 
-                Verification vscreen = new Verification(frame);
-                add(vscreen);
+                ManageCustomerGUI vscreen = new ManageCustomerGUI();
                 vscreen.setVisible(true);   
             }
         }

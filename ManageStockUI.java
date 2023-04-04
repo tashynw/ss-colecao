@@ -54,8 +54,7 @@ public class ManageStockUI extends JFrame {
     private JLabel logo;
 
     public ManageStockUI(){
-        this.frame = this;
-
+        this.frame=this;
         //Font and Defaults
         Font f = new Font("Montserrat", Font.BOLD, 20);
         frame.setTitle("SS Colecao - Manage Stock");
@@ -234,10 +233,10 @@ public class ManageStockUI extends JFrame {
 	private class ButtonListener implements ActionListener{
 		public void actionPerformed(ActionEvent eve) {
             if(eve.getSource()==back){
-                background.setVisible(false);
+                setVisible(false);
 
-                MainMenu mscreen = new MainMenu(frame);
-                frame.add(mscreen);
+                MainMenu mscreen = new MainMenu();
+                //frame.add(mscreen);
                 mscreen.setVisible(true);   
             }
             

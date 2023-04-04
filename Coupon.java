@@ -1,6 +1,4 @@
-import java.io.File;
-
-public class Coupon{
+public class Coupon {
     //Attributes
     private Order order;
     private Double couponPercentage;
@@ -18,5 +16,4 @@ public class Coupon{
     public Double getPercentage(){
         return this.couponPercentage;
     }
-
 }

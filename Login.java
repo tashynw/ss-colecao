@@ -157,7 +157,7 @@ public class Login extends JFrame{
 						loginPanel.setVisible(false);
 						background.setVisible(false);
 
-						mmscreen = new MainMenu(frame);
+						mmscreen = new MainMenu();
 						add(mmscreen);
 						mmscreen.setVisible(true);              
 						break;
