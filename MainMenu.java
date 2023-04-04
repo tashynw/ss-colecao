@@ -140,14 +140,4 @@ public class MainMenu extends JFrame{
             }
         }
 	}
-
-    //method to logout of admin screen
-    private class LogoutListener implements ActionListener
-    {
-        public void actionPerformed(ActionEvent ae){
-            Login l = new Login();
-            setVisible(false);
-            frame.dispose();   
-        }
-    }
 }
