@@ -55,5 +55,5 @@ public class Order {
 
     public Double getTotalPrice() { return this.totalPrice; }
 
-    public String detailedString() { return "Name - " + this.order_detail.getStockType().name() + "\n<br>Quantity - " +this.getItemCount()+"\n<br>Price - "+this.order_detail.getPrice(); }
+    public String detailedString() { return "Name - " + this.order_detail.getStockName() + "\n<br>Quantity - " +this.getItemCount()+"\n<br>Price - "+this.order_detail.getPrice(); }
 }

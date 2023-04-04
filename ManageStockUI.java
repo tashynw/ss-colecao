@@ -30,7 +30,6 @@ public class ManageStockUI extends JFrame {
     private JPanel addStock;
 
     private JLabel item_countlbl;
-    private JLabel item_typelbl;
     private JLabel item_colorlbl;
     private JLabel item_size;
     private JLabel item_countlbl2;
@@ -39,23 +38,20 @@ public class ManageStockUI extends JFrame {
 
     private JButton submit_btn;
     private JButton reset_btn;
-    private JButton cancel_btn;
+    private JButton delete_btn;
     private JButton confirm_btn;
     private JButton searchButton;
 
-    private JComboBox item_type_menu;
     private JComboBox item_color_menu;
     private JComboBox item_size_menu;
 
-    private JTextField counter;
-    private JTextField counter2;
+    private JTextField itemNameText;
+    private JTextField itemPriceText;
     private JTextField searchText;
 
     //bottom Pane
     private JButton back;
     private JLabel logo;
-
-    private ArrayList<Stock> stocks = new ArrayList<Stock>();
 
     public ManageStockUI(){
         this.frame = this;
@@ -69,17 +65,13 @@ public class ManageStockUI extends JFrame {
         search_label = new JLabel("Search by Stock Name: ");
 
         //Table Setup
-        //stocks = load_stock("database/stock.txt");
-        //String[] columnNames = {"Stock Type", "Stock Color", "Stock Size", "Quantity", "Price"};
 
-        String[] columnNames = {"Stock Type", "Stock Size", "Stock Color", "Price", "Quantity"};
+        String[] columnNames = {"Stock ID","Stock Name", "Stock Size", "Stock Color", "Price"};
 
         this.model = new DefaultTableModel(columnNames, 0);
         this.stable = new JTable(model);
         sort = new TableRowSorter<>(model);
-        //showTable((ArrayList<Stock>) ManageStock.getAllStock()); //getAllStock
-        //showTable(stocks);
-        //stable.setRowSorter(sort);
+        showTable((ArrayList<Object[]>) ManageStock.getAllStocks());
         stable.setBounds(20, 30, 450, 450);
         pane = new JScrollPane(stable);
         pane.setViewportView(stable);
@@ -91,34 +83,10 @@ public class ManageStockUI extends JFrame {
         //Order Table Display
         table = new JPanel();
         table.setBackground(Color.GRAY);
-        //table.add(search_label);
-        //table.add(searchbar);
         table.add(pane);
 
         back = new JButton("Back");
         back.addActionListener(new ButtonListener());
-        // searchbar.getDocument().addDocumentListener(new DocumentListener() {
-        //     @Override
-        //     public void insertUpdate(DocumentEvent e) {
-        //         search(searchbar.getText());
-        //     }
-        //     @Override
-        //     public void removeUpdate(DocumentEvent e) {
-        //         search(searchbar.getText());
-        //     }
-        //     @Override
-        //     public void changedUpdate(DocumentEvent e) {
-        //         search(searchbar.getText());
-        //     }
-        //     public void search(String str) {
-        //         if (str.length() == 0) {
-        //             sort.setRowFilter(null);
-        //         } 
-        //         else{
-        //             sort.setRowFilter(RowFilter.regexFilter(str));
-        //         }
-        //     }
-        // });
 
         //Add Order Pane
         JPanel infoPanel = new JPanel(new GridLayout(6, 2, 10, 10));
@@ -144,44 +112,39 @@ public class ManageStockUI extends JFrame {
         addStock.add(addl);
 
         //Customer Information
-        item_countlbl2 = new JLabel("Item Count: ");
+        item_countlbl2 = new JLabel("Item Price: ");
 
         //Labels
-        item_typelbl = new JLabel("Item Type: ");
         item_colorlbl = new JLabel("Item Color: ");
         item_size = new JLabel("Item Size: ");
         searchLabel = new JLabel("Search by Stock Type: ");
 
         //Stock Type
-        String[] stockTypes = {"Bikini_Bottoms", "Bikini_Tops"};
         String[] stockColors = {"Black", "White", "Pattern"};
         String[] stockSizes = {"S", "M", "L"};
 
         //Combo Boxes
-        item_type_menu = new JComboBox<>(stockTypes);
         item_color_menu = new JComboBox<>(stockColors);
         item_size_menu = new JComboBox<>(stockSizes);
 
         //TextFields
-        counter = new JTextField(4);
-        counter2 = new JTextField(4);
+        itemNameText = new JTextField(4);
+        itemPriceText = new JTextField(4);
         searchText = new JTextField(4);
         searchButton = new JButton("Search");
         searchButton.addActionListener(new ButtonListener());
         
 
         //Add to Cinfo Panel
-        cinfoPanel.setBorder(new TitledBorder("Amount of a Type of Stock"));
+        cinfoPanel.setBorder(new TitledBorder("Enter new Stock name"));
         cinfoPanel.setBounds(20, 80, 400, 220);
 
         cinfoPanel.add(item_countlbl2);
-        cinfoPanel.add(counter);
+        cinfoPanel.add(itemNameText);
 
         //Add to Info Panel
         infoPanel.setBorder(new TitledBorder("Item Details"));
         infoPanel.setBounds(20, 325, 400, 200);
-        infoPanel.add(item_typelbl);
-        infoPanel.add(item_type_menu);
 
         infoPanel.add(item_colorlbl);
         infoPanel.add(item_color_menu);
@@ -190,31 +153,25 @@ public class ManageStockUI extends JFrame {
         infoPanel.add(item_size_menu);
 
         infoPanel.add(item_countlbl2);
-        infoPanel.add(counter2);
+        infoPanel.add(itemPriceText);
 
-        //Button For Order Confirmation and Cancelling
+        //Button For Order Confirmation and Deleting
         submit_btn = new JButton("Submit");
         submit_btn.addActionListener(new ButtonListener());
 
         reset_btn = new JButton("Reset");
         reset_btn.addActionListener(new ButtonListener());
 
-        cancel_btn = new JButton("Cancel");
-        cancel_btn.addActionListener(new ButtonListener());
+        delete_btn = new JButton("Delete");
+        delete_btn.addActionListener(new ButtonListener());
 
         confirm_btn = new JButton("Confirm Stock");
         confirm_btn.addActionListener(new ButtonListener());
 
         infoPanel.add(submit_btn);
         infoPanel.add(reset_btn);
-        infoPanel.add(cancel_btn);
+        infoPanel.add(delete_btn);
         infoPanel.add(confirm_btn);
-
-        // infoPanel.setBorder( new TitledBorder(""));
-        // infoPanel.setBounds(20, 350, 400, 200);
-        // infoPanel.add(searchLabel);
-        // infoPanel.add(searchText);
-        // infoPanel.add(searchButton);
 
         searchPanel.setBorder( new TitledBorder(""));
         searchPanel.setBounds(20, 550, 400, 200);
@@ -254,7 +211,7 @@ public class ManageStockUI extends JFrame {
     }
 
     //Method to show orders in a list in GUI table display.
-    private void showTable(ArrayList<Stock> stocks){
+    private void showTable(ArrayList<Object[]> stocks){
         if (stocks == null || stocks.size() <= 0)
             return;
         for(int j=0; stocks.size()>j; j++)
@@ -262,50 +219,18 @@ public class ManageStockUI extends JFrame {
     }
 
     //Function to add a row to the table
-    private void addToTable(Stock st){
-        String atype = st.getStockType().name();
-        String siz = st.getItemSize().name();
-        String col = st.getItemColor().name();
-        int price = st.getPrice();
-        
-        //{"Ticket #", "Customer ID", "Item Amount", "Status"};
-        String[] item= {""+ atype, col, siz, ""+price};
+    private void addToTable(Object[] st){
+        String stockName = ((Stock)(st[1])).getStockName();
+        String size = ((Stock)(st[1])).getItemSize();
+        String col = ((Stock)(st[1])).getItemColor();
+        double price = ((Stock)(st[1])).getPrice();
+
+        String[] item= {(String)st[0], stockName, size, col, String.valueOf(price)};
         model.addRow(item);   
     }
-    
-    //Function to create an array list of orders from a file
-    // private ArrayList<Stock> load_stock(String sfile){
-
-    //     Scanner sscan = null;
-    //     ArrayList<Stock> StockList = new ArrayList<Stock>();
-
-    //     try{
-    //         sscan  = new Scanner(new File(sfile));
-    //         while(sscan.hasNext())
-    //         {
-    //             String data = sscan.nextLine(); 
-    //             String[] nextLine = data.split(", ");
-    //             //Output:6, bikini_top, Pattern, L, 300
-
-    //             int amt = Integer.parseInt(nextLine[0]);
-    //             StockType atype = StockType.valueOf(nextLine[1]);
-    //             ItemColor col = ItemColor.valueOf(nextLine[2]);
-    //             Size siz = Size.valueOf(nextLine[3]);
-    //             int price = Integer.parseInt(nextLine[4]);
-
-    //             Stock nStock = new Stock(atype, col, siz, price);
-    //             StockList.add(nStock);
-    //         }
-    //         sscan.close();
-    //     }
-    //     catch(IOException e)
-    //     {}
-    //     return StockList; 
-    // }
 
     
-    //Button Listeners for: Back
-    //method to add function to the back button
+
 	private class ButtonListener implements ActionListener{
 		public void actionPerformed(ActionEvent eve) {
             if(eve.getSource()==back){
@@ -317,51 +242,37 @@ public class ManageStockUI extends JFrame {
             }
             
             if(eve.getSource()==submit_btn){
-                if(item_countlbl.getText().isBlank() || item_countlbl2.getText().isBlank()){
-                    errormsg.setText("Please fill out all the fields");
-                }
-                // else{
-                //     String item_countlbl = stockAmt.getText();
-                //     String stockType = stockType.getText();
-                //     String stockColor = stockColor.getText();
-                //     String stockSize = stockSize.getText();
-                //     String price = price.getText();
-                //     String item_countlbl2 = itemCount.getText();
 
-                //     Stock stoc = new Stock(stockType, stockColor, stockSize, price);
-
-                //     Stock stock = ManageCustomer.findCustomer(stockType);
-                //     if(stock!=null){
-                //         errormsg.setText("Stock already present"); //or is it that stock count updates?
-                //     }
-                //     else{
-                //         //ManageStock.createStock(stoc);
-                //     }
-
-                //     try{
-                //         model.setRowCount(0);
-                //         //showTable((ArrayList<Stock>) ManageStock.getAllStock());
-                //     }
-                //     catch(Error e){
-                //         errormsg.setText("Recheck Input Values");
-                //     }
-                // }
             }
 
             if(eve.getSource()==reset_btn){
-                counter.setText("");
-                counter2.setText("");
+                itemNameText.setText("");
+                itemPriceText.setText("");
                 searchText.setText("");
+                model.setRowCount(0);
+                showTable((ArrayList<Object[]>) ManageStock.getAllStocks());
             }
 
-            if(eve.getSource()==cancel_btn){
-                counter.setText("");
-                counter2.setText("");
-                searchText.setText("");
+            if(eve.getSource()==delete_btn){
+                int selectedRowIndex = stable.getSelectedRow();
+                if(selectedRowIndex!=-1) {
+                    Object[] rowData = model.getDataVector().elementAt(stable.convertRowIndexToModel(selectedRowIndex)).toArray();
+                    String stockId = (String)rowData[0];
+                    ManageStock.deleteStock(stockId);
+                    model.setRowCount(0);
+                    showTable((ArrayList<Object[]>) ManageStock.getAllStocks());
+                }
             }
 
             if(eve.getSource()==confirm_btn){
-
+                if(itemPriceText.getText().isBlank() || itemNameText.getText().isBlank()){
+                    errormsg.setText("Please fill out all the fields");
+                } else {
+                    Stock newStock = new Stock(itemNameText.getText(), String.valueOf(item_color_menu.getSelectedItem()),String.valueOf(item_size_menu.getSelectedItem()),Double.valueOf(itemPriceText.getText()));
+                    ManageStock.createStock(newStock);
+                    model.setRowCount(0);
+                    showTable((ArrayList<Object[]>) ManageStock.getAllStocks());
+                }
             }
             
             if(eve.getSource()==searchButton){
@@ -369,11 +280,11 @@ public class ManageStockUI extends JFrame {
                     errormsg.setText("Please enter stock type to search");
                 }
                 else{
-                    String stockType = searchText.getText();
+                    String stockNameToSearch = searchText.getText();
 
                     try{
                         model.setRowCount(0);
-                        //showTable((ArrayList<Stock>) ManageStock.searchStockByStockType(stockType));
+                        showTable((ArrayList<Object[]>) ManageStock.searchStocksByItemName(stockNameToSearch));
                     }
                     catch(Error e){
                         errormsg.setText("Recheck Input Values");
@@ -384,8 +295,5 @@ public class ManageStockUI extends JFrame {
             
         }
 	}
-
-     //JDropDownSelection Menu with sorts of: Ticket #, Customer ID,
-     //Successful Orders and Unsuccessful Orders - more of filter
 }
 

@@ -1,4 +1,6 @@
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ManageStock {
     public ManageStock(){}
@@ -20,6 +22,23 @@ public class ManageStock {
         }
     }
 
+    public static boolean deleteStock(String stockId){
+        try{
+            Class.forName("com.mysql.cj.jdbc.Driver");
+
+            Statement stmt = null;
+            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/ss_colecao?" + "user=root&password=password!23");
+
+            stmt = conn.createStatement();
+            int rowsAffected = stmt.executeUpdate(String.format("DELETE FROM Stocks WHERE stock_id=%s;", stockId));
+
+            return true;
+        } catch(Error | SQLException | ClassNotFoundException e){
+            System.out.println("DB ERROR "+e);
+            return false;
+        }
+    }
+
     public static Stock findStock(String stock_name){
         Stock stock = null;
         try{
@@ -33,11 +52,11 @@ public class ManageStock {
             rs = stmt.executeQuery(String.format("SELECT * from Stocks WHERE item_name='%s'", stock_name));
 
             if (rs.next()) {
-                StockType stockType = StockType.valueOf(rs.getString("item_name"));
-                ItemColor itemColor = ItemColor.valueOf(rs.getString("item_color"));
-                Size itemSize = Size.valueOf(rs.getString("item_size"));
+                String stockName = String.valueOf(rs.getString("item_name"));
+                String itemColor = String.valueOf(rs.getString("item_color"));
+                String itemSize = String.valueOf(rs.getString("item_size"));
                 int price = rs.getInt("price");
-                stock = new Stock(stockType, itemColor, itemSize, price);
+                stock = new Stock(stockName, itemColor, itemSize, price);
             }
 
             System.out.println("RESULT " + stock);
@@ -61,11 +80,11 @@ public class ManageStock {
             rs = stmt.executeQuery(String.format("SELECT * from Stocks WHERE stock_id='%s'", stock_id));
 
             if (rs.next()) {
-                StockType stockType = StockType.valueOf(rs.getString("item_name"));
-                ItemColor itemColor = ItemColor.valueOf(rs.getString("item_color"));
-                Size itemSize = Size.valueOf(rs.getString("item_size"));
+                String stockName = String.valueOf(rs.getString("item_name"));
+                String itemColor = String.valueOf(rs.getString("item_color"));
+                String itemSize = String.valueOf(rs.getString("item_size"));
                 int price = rs.getInt("price");
-                stock = new Stock(stockType, itemColor, itemSize, price);
+                stock = new Stock(stockName, itemColor, itemSize, price);
             }
 
             System.out.println("RESULT " + stock);
@@ -121,6 +140,62 @@ public class ManageStock {
         } catch(Error | SQLException | ClassNotFoundException e){
             System.out.println("DB ERROR "+e);
             return price;
+        }
+    }
+    public static List<Object[]> getAllStocks(){
+        try{
+            Class.forName("com.mysql.cj.jdbc.Driver");
+
+            Statement stmt = null;
+            ResultSet rs = null;
+            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/ss_colecao?" + "user=root&password=password!23");
+
+            stmt = conn.createStatement();
+            rs = stmt.executeQuery("SELECT * from Stocks;");
+            List<Object[]> stockList = new ArrayList<>();
+            while (rs.next()) {
+                String stockId = String.valueOf(rs.getInt("stock_id"));
+                String itemName = rs.getString("item_name");
+                String itemColor = rs.getString("item_color");
+                String itemSize = rs.getString("item_size");
+                Double price = Double.valueOf(rs.getFloat("price"));
+
+                Stock stock = new Stock(itemName, itemColor,itemSize,price);
+                stockList.add(new Object[]{ stockId,stock });
+            }
+            System.out.println("RESULT "+stockList);
+            return stockList;
+        } catch(Error | SQLException | ClassNotFoundException e){
+            System.out.println("DB ERROR "+e);
+            return new ArrayList<>();
+        }
+    }
+    public static List<Object[]> searchStocksByItemName(String itemNameToSearch){
+        try{
+            Class.forName("com.mysql.cj.jdbc.Driver");
+
+            Statement stmt = null;
+            ResultSet rs = null;
+            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/ss_colecao?" + "user=root&password=password!23");
+
+            stmt = conn.createStatement();
+            rs = stmt.executeQuery(String.format("SELECT * from Stocks WHERE item_name LIKE '%%%s%%';", itemNameToSearch));
+            List<Object[]> stockList = new ArrayList<>();
+            while (rs.next()) {
+                String stockId = String.valueOf(rs.getInt("stock_id"));
+                String itemName = rs.getString("item_name");
+                String itemColor = rs.getString("item_color");
+                String itemSize = rs.getString("item_size");
+                Double price = Double.valueOf(rs.getFloat("price"));
+
+                Stock stock = new Stock(itemName, itemColor,itemSize,price);
+                stockList.add(new Object[]{ stockId,stock });
+            }
+            System.out.println("RESULT "+stockList);
+            return stockList;
+        } catch(Error | SQLException | ClassNotFoundException e){
+            System.out.println("DB ERROR "+e);
+            return new ArrayList<>();
         }
     }
 }

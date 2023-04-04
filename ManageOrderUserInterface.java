@@ -257,7 +257,7 @@ public class ManageOrderUserInterface extends JFrame{
         String full = ((Order)o[1]).getCustomerName();
         int amt = ((Order)o[1]).getItemCount();
         String stat = ((Order)o[1]).getStatus();
-        String itemName = ((Order)o[1]).getItem().getStockType().name();
+        String itemName = ((Order)o[1]).getItem().getItemName();
         String totalCost = String.format("%.2f", ((Order)o[1]).getTotalPrice());
 
         String[] item= {orderId,full, String.valueOf(amt), stat, itemName, totalCost};
@@ -271,11 +271,9 @@ public class ManageOrderUserInterface extends JFrame{
 		{
             //back
             if(eve.getSource()==back){
-                background.setVisible(false);
-
-                MainMenu mscreen = new MainMenu(frame);
-                frame.add(mscreen);
-                mscreen.setVisible(true);   
+                //temporarily
+                ManageStockUI manageStockUI = new ManageStockUI();
+                manageStockUI.setVisible(true);
             }
 
             //add coupon

@@ -1,35 +1,34 @@
 public class Stock{
     //Attributes
-    private int price;
+    private double price;
     private String itemName;
-    private StockType s_type;
-    private ItemColor s_color;
-    private Size s_size;
+    private String s_color;
+    private String s_size;
 
     //Constructor
-    public Stock(StockType st, ItemColor sc, Size s, int price){
-        this.s_type = st;
-        this.s_color = sc;
-        this.s_size = s;
+    public Stock(String itemName, String stockColor, String stockSize, double price){
+        this.itemName = itemName;
+        this.s_color = stockColor;
+        this.s_size = stockSize;
         this.price = price;
     }
 
     //Method to return the type of stock
-    public StockType getStockType(){
-        return s_type;
+    public String getStockName(){
+        return this.itemName;
     }
 
     //Method to return the color of an item
-    public ItemColor getItemColor(){
-        return s_color;
+    public String getItemColor(){
+        return this.s_color;
     }
 
     //Method to return the size of an item
-    public Size getItemSize(){
+    public String getItemSize(){
         return s_size;
     }
     public String getItemName(){ return this.itemName; }
-    public int getPrice(){
+    public double getPrice(){
         return price;
     }
 }

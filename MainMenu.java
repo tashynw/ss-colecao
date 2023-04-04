@@ -141,7 +141,7 @@ public class MainMenu extends JPanel{
                 navbar.setVisible(false);
                 background.setVisible(false);
 
-                ManageStockUserInterface sscreen = new ManageStockUserInterface(frame);
+                ManageStockUI sscreen = new ManageStockUI();
                 add(sscreen);
                 sscreen.setVisible(true);   
             }
