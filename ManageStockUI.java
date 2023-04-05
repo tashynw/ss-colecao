@@ -152,7 +152,6 @@ public class ManageStockUI extends JFrame {
 
         //Button For Order Confirmation and Deleting
         back_btn = new JButton("Back");
-        submit_btn.addActionListener(new ButtonListener());
 
         back_btn = new JButton("Reset");
         reset_btn.addActionListener(new ButtonListener());
