@@ -170,6 +170,28 @@ public class ManageStock {
             return new ArrayList<>();
         }
     }
+    public static String[] getAllStockNames(){
+        try{
+            Class.forName("com.mysql.cj.jdbc.Driver");
+
+            Statement stmt = null;
+            ResultSet rs = null;
+            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/ss_colecao?" + "user=root&password=password!23");
+
+            stmt = conn.createStatement();
+            rs = stmt.executeQuery("SELECT * from Stocks;");
+            List<String> stockNames = new ArrayList<>();
+            while (rs.next()) {
+                String itemName = rs.getString("item_name");
+                stockNames.add(itemName);
+            }
+            System.out.println("RESULT "+stockNames);
+            return stockNames.toArray(new String[stockNames.size()]);
+        } catch(Error | SQLException | ClassNotFoundException e){
+            System.out.println("DB ERROR "+e);
+            return new String[0];
+        }
+    }
     public static List<Object[]> searchStocksByItemName(String itemNameToSearch){
         try{
             Class.forName("com.mysql.cj.jdbc.Driver");

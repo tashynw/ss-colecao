@@ -114,7 +114,7 @@ public class MainMenu extends JFrame{
 
             //Stock Management
             if(eve.getSource()==stock){
-                navbar.setVisible(false);
+                setVisible(false);
                 background.setVisible(false);
 
                 ManageStockUI sscreen = new ManageStockUI();
@@ -123,7 +123,7 @@ public class MainMenu extends JFrame{
 
             //Order Management
             if(eve.getSource()==order){
-                navbar.setVisible(false);
+                setVisible(false);
                 background.setVisible(false);
 
                 ManageOrderUserInterface oscreen = new ManageOrderUserInterface();
@@ -132,7 +132,7 @@ public class MainMenu extends JFrame{
 
             //Customer Management
             if(eve.getSource()==cust){
-                navbar.setVisible(false);
+                setVisible(false);
                 background.setVisible(false);
 
                 ManageCustomerGUI vscreen = new ManageCustomerGUI();

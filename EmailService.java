@@ -8,12 +8,12 @@ public class EmailService {
 
     public static void sendCustomerCreatedEmail(Customer customer){
         //Set the SMTP server and port
-        String smtpHost = "smtp-relay.sendinblue.com";
+        String smtpHost = "smtp-relay.emailhost.com";
         int smtpPort = 587;
 
         //Set the SMTP username and password
-        String username = "amegotashyn@gmail.com";
-        String password = "MQbFEcpZ3hnGHYWr";
+        String username = "smtpUsername@smtp.com";
+        String password = "EJFIEHENIGEOE3U383";
 
         // Set the email message
         String to = customer.getEmail();
@@ -53,12 +53,12 @@ public class EmailService {
 
     public static void sendOrderCreatedEmail(Order order){
         //Set the SMTP server and port
-        String smtpHost = "smtp-relay.sendinblue.com";
+        String smtpHost = "smtp-relay.emailhost.com";
         int smtpPort = 587;
 
         //Set the SMTP username and password
-        String username = "amegotashyn@gmail.com";
-        String password = "MQbFEcpZ3hnGHYWr";
+        String username = "smtpUsername@smtp.com";
+        String password = "EJFIEHENIGEOE3U383";
 
         // Set the email message
         String to = order.getCustomer().getEmail();

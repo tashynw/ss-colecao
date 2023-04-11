@@ -152,8 +152,9 @@ public class ManageStockUI extends JFrame {
 
         //Button For Order Confirmation and Deleting
         back_btn = new JButton("Back");
+        reset_btn = new JButton("Reset");
 
-        back_btn = new JButton("Reset");
+        back_btn.addActionListener(new ButtonListener());
         reset_btn.addActionListener(new ButtonListener());
 
         delete_btn = new JButton("Delete");
@@ -230,7 +231,6 @@ public class ManageStockUI extends JFrame {
                 setVisible(false);
 
                 MainMenu mscreen = new MainMenu();
-                //frame.add(mscreen);
                 mscreen.setVisible(true);   
             }
 

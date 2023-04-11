@@ -133,7 +133,8 @@ public class ManageOrderUserInterface extends JFrame{
         errormsg.setBounds(20, 100, 400, 250);
 
         //Stock Type
-        String[] stockTypes = {"Bikini_Bottom", "Bikini_Top"};
+        //String[] stockTypes = {"Bikini_Bottom", "Bikini_Top"};
+        String[] stockTypes = ManageStock.getAllStockNames();
         String[] stockColors = {"Black", "White", "Pattern"};
         String[] stockSizes = {"S", "M", "L"};
         String[] courier_mode = {"Pickup", "Delivery"};
@@ -274,7 +275,6 @@ public class ManageOrderUserInterface extends JFrame{
                 setVisible(false);
 
                 MainMenu mscreen = new MainMenu();
-                //frame.add(mscreen);
                 mscreen.setVisible(true);
             }
 
@@ -303,6 +303,8 @@ public class ManageOrderUserInterface extends JFrame{
             }
 
             if(eve.getSource()==cancel_btn){
+                setVisible(false);
+
                 ManageCustomerGUI manageCustomerScreen = new ManageCustomerGUI();
                 manageCustomerScreen.setVisible(true);
             }
